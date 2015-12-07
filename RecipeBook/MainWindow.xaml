@@ -22,6 +22,7 @@
                 <MenuItem Header="Exit" Click="Exit_MenuItem_Click"/>
             </MenuItem>
             <MenuItem Header="Tools">
+                <MenuItem Header="Edit Measurements" Click="EditMeasurements_MenuItem_Click"/>
                 <MenuItem Header="Edit Ingredients" Click="EditIngredients_MenuItem_Click"/>
                 <MenuItem Header="View Recipes" Click="ViewRecipes_MenuItem_Click"/>
             </MenuItem>

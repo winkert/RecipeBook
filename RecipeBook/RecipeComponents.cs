@@ -18,6 +18,30 @@ namespace RecipeBook.Components
         }
     }
 
+    public static class Utilities
+    {
+        public static string Pluralize(string s)
+        {
+            if (s.Length < 1)
+                return s;
+            char ultimateLetter = s.Last();
+            string penultimateLetter = s.Substring(s.Length - 2, 1);
+            if (ultimateLetter == 'y' && "aeiou".IndexOf(penultimateLetter) < 0)
+            {
+                return s.Substring(0, s.Length - 1) + "ies";
+            }
+            else
+                if (ultimateLetter == 's')
+            {
+                return s + "es";
+            }
+            else
+            {
+                return s + "s";
+            }
+        }
+    }
+
     public class IngredientEntry
     {
         public IngredientEntry()
@@ -48,8 +72,18 @@ namespace RecipeBook.Components
 
         public override string ToString()
         {
-
-            return Amount.ToString() + " " + Measurement.mes_Name + " of " + Ingredient.ing_Name;
+            string IngName = Ingredient.ing_Name;
+            string MesName = Measurement.mes_Name;
+            if(Amount > 1)
+            {
+                IngName = Utilities.Pluralize(IngName);
+                MesName = Utilities.Pluralize(MesName);
+            }
+            if (Measurement.mes_Type == (int)MeasurementTypes.count)
+            {
+                return Amount.ToString() + " " + IngName;
+            }
+            return Amount.ToString() + " " + MesName + " of " + IngName;
         }
     }
 

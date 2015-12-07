@@ -158,6 +158,10 @@ namespace RecipeBook
                 Close();
             }
         }
+        private void EditMeasurements_MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
         private void EditIngredients_MenuItem_Click(object sender, RoutedEventArgs e)
         {
 
@@ -207,5 +211,6 @@ namespace RecipeBook
             }
         }
         #endregion
+
     }
 }
