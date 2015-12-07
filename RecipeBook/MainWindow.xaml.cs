@@ -28,31 +28,16 @@ namespace RecipeBook
         }
         #region Fields
         List<IngredientEntry> _Ingredients = new List<IngredientEntry>();
-        //To be deleted
-        List<Ingredient> allIngredients = new List<Ingredient>();
-        List<Measurement> allMeasurements = new List<Measurement>();
         #endregion
 
         #region Methods
         private void BuildComboBoxes()
         {
-            //using (RecipeBook_DataModelDataContext db = new RecipeBook_DataModelDataContext())
-            //{
-            //    cmb_IngredientNames.ItemsSource = db.Ingredients;
-            //    cmb_Measurement.ItemsSource = db.Measurements;
-            //}
-            for (int n = 0; n < 3; n++)
+            using (RecipeBook_DataModelDataContext db = new RecipeBook_DataModelDataContext())
             {
-                Ingredient i = new Ingredient();
-                i.ing_Name = "Ingredient" + n.ToString();
-                Measurement m = new Measurement();
-                m.mes_Name = "Measurement" + n.ToString();
-                m.mes_Type = n;
-                allIngredients.Add(i);
-                allMeasurements.Add(m); 
+                cmb_IngredientNames.ItemsSource = db.Ingredients;
+                cmb_Measurement.ItemsSource = db.Measurements;
             }
-            cmb_IngredientNames.ItemsSource = allIngredients;
-            cmb_Measurement.ItemsSource = allMeasurements;
         }
         private void RefreshIngredientList()
         {
@@ -160,15 +145,42 @@ namespace RecipeBook
         }
         private void EditMeasurements_MenuItem_Click(object sender, RoutedEventArgs e)
         {
-
+            EditMeasurements window;
+            if (OwnedWindows.OfType<EditMeasurements>().Count() == 0)
+            {
+                window = new EditMeasurements(); 
+            }
+            else
+            {
+                window = OwnedWindows.OfType<EditMeasurements>().First();
+            }
+            window.Show();
         }
         private void EditIngredients_MenuItem_Click(object sender, RoutedEventArgs e)
         {
-
+            //EditMeasurements window;
+            //if (OwnedWindows.OfType<EditMeasurements>().Count() == 0)
+            //{
+            //    window = new EditMeasurements();
+            //}
+            //else
+            //{
+            //    window = OwnedWindows.OfType<EditMeasurements>().First();
+            //}
+            //window.Show();
         }
         private void ViewRecipes_MenuItem_Click(object sender, RoutedEventArgs e)
         {
-
+            //EditMeasurements window;
+            //if (OwnedWindows.OfType<EditMeasurements>().Count() == 0)
+            //{
+            //    window = new EditMeasurements();
+            //}
+            //else
+            //{
+            //    window = OwnedWindows.OfType<EditMeasurements>().First();
+            //}
+            //window.Show();
         }
 
         #region Ingredient Events

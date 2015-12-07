@@ -71,12 +71,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="EditMeasurements.xaml.cs">
+      <DependentUpon>EditMeasurements.xaml</DependentUpon>
+    </Compile>
     <Compile Include="RecipeBook_DataModel.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>RecipeBook_DataModel.dbml</DependentUpon>
     </Compile>
     <Compile Include="RecipeComponents.cs" />
+    <Page Include="EditMeasurements.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
