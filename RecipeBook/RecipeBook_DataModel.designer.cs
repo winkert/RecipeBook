@@ -148,11 +148,7 @@ namespace RecipeBook
     partial void Onrec_EntryDateChanging(System.Nullable<System.DateTime> value);
     partial void Onrec_EntryDateChanged();
         #endregion
-        //Add override of ToString() for Recipe
-        public override string ToString()
-        {
-            return rec_Name;
-        }
+
         public Recipe()
 		{
 			this._RecipeIngredients = new EntitySet<RecipeIngredient>(new Action<RecipeIngredient>(this.attach_RecipeIngredients), new Action<RecipeIngredient>(this.detach_RecipeIngredients));
@@ -370,7 +366,6 @@ namespace RecipeBook
     partial void Oning_DescriptionChanging(string value);
     partial void Oning_DescriptionChanged();
         #endregion
-        //Add override of ToString() for Ingredient
         public override string ToString()
         {
             return ing_Name;
@@ -516,7 +511,6 @@ namespace RecipeBook
     partial void Onmes_TypeChanging(System.Nullable<int> value);
     partial void Onmes_TypeChanged();
         #endregion
-        //Add override of ToString() for Measurement
         public override string ToString()
         {
             return mes_Name;
