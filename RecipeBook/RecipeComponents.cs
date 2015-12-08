@@ -132,7 +132,34 @@ namespace RecipeBook.Components
             {
                 using (RecipeBook_DataModelDataContext db = new RecipeBook_DataModelDataContext())
                 {
+                    Recipe rec = new Recipe();
+                    rec.rec_Name = name;
+                    rec.rec_Source = source;
+                    rec.rec_Description = description;
+                    rec.rec_PreparationInstructions = prep;
+                    rec.rec_CookingInstructions = cook;
+                    rec.rec_EntryDate = DateTime.Today;
+                    db.Recipes.InsertOnSubmit(rec);
+                    db.SubmitChanges();
+                    int recid = (from i in db.Recipes select i.rec_ID).Equals(null)
+                        ? (from i in db.Recipes orderby i.rec_ID descending select i.rec_ID).First() : 0;
+                    Console.WriteLine(recid.ToString());
+                    foreach (IngredientEntry i in ingredients)
+                    {
+                        RecipeIngredient recing = new RecipeIngredient();
+                        recing.rec_ID = recid;
+                        recing.ing_ID = i.Ingredient.ing_ID;
+                        recing.mes_ID = i.Measurement.mes_ID;
+                        recing.ri_Amount = i.Amount;
+                        db.RecipeIngredients.InsertOnSubmit(recing);
+                    }
+                    db.SubmitChanges();
 
+                    var q = from ri in db.RecipeIngredients select ri;
+                    foreach(RecipeIngredient n in q)
+                    {
+                        Console.WriteLine(n.ToString());
+                    }
                 }
             }
             catch (Exception)
@@ -156,13 +183,15 @@ namespace RecipeBook.Components
                 throw;
             }
         }
-        public static void DeleteRecipe(string name, string source, string description, string prep, string cook, List<IngredientEntry> ingredients, int rec_ID)
+        public static void DeleteRecipe(int rec_ID)
         {
             try
             {
                 using (RecipeBook_DataModelDataContext db = new RecipeBook_DataModelDataContext())
                 {
-
+                    var recings = from ri in db.RecipeIngredients where ri.rec_ID == rec_ID select ri;
+                    db.RecipeIngredients.DeleteAllOnSubmit(recings);
+                    db.SubmitChanges();
                 }
             }
             catch (Exception)

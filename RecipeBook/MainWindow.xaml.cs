@@ -70,7 +70,14 @@ namespace RecipeBook
         }
         public void SaveRecipe()
         {
-            Recipes.InsertRecipe(txt_RecipeName.Text, txt_RecipeSource.Text, txt_RecipeDescription.Text, txt_RecipePrepInstructions.Text, txt_RecipeCookInstructions.Text, _Ingredients);
+            try
+            {
+                Recipes.InsertRecipe(txt_RecipeName.Text, txt_RecipeSource.Text, txt_RecipeDescription.Text, txt_RecipePrepInstructions.Text, txt_RecipeCookInstructions.Text, _Ingredients);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
         }
 
         #region Data Validation
