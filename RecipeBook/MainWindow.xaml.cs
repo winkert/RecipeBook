@@ -1,18 +1,11 @@
 ﻿using RecipeBook.Components;
+using RecipeBook.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using System.Windows.Interop;
 
 namespace RecipeBook
 {
@@ -26,6 +19,7 @@ namespace RecipeBook
             InitializeComponent();
             BuildIngredientComboBox();
             BuildMeasurementComboBox();
+            ProcessWatcher.StartWatch();
         }
         #region Fields
         List<IngredientEntry> _Ingredients = new List<IngredientEntry>();
@@ -246,9 +240,20 @@ namespace RecipeBook
 
         private void MainWindow_Activated(object sender, EventArgs e)
         {
-            BuildIngredientComboBox();
-            BuildMeasurementComboBox();
-            RefreshIngredientList();
+            HwndSource hwnds = HwndSource.FromHwnd(ProcessWatcher.LastHandle);
+            Window LastActiveWindow = hwnds.RootVisual as Window;
+            if (LastActiveWindow != null)
+            {
+                if (LastActiveWindow is EditIngredients)
+                {
+                    BuildIngredientComboBox();
+                }
+                else if (LastActiveWindow is EditMeasurements)
+                {
+                    BuildMeasurementComboBox();
+                }
+                RefreshIngredientList(); 
+            }
         }
     }
 }

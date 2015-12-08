@@ -1,8 +1,7 @@
-﻿using System;
+﻿using RecipeBook.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RecipeBook.Components
 {
@@ -182,32 +181,7 @@ namespace RecipeBook.Components
             return t;
         }
     }
-
-
-    public static class Utilities
-    {
-        public static string Pluralize(string s)
-        {
-            if (s.Length < 1)
-                return s;
-            char ultimateLetter = s.Last();
-            string penultimateLetter = s.Substring(s.Length - 2, 1);
-            if (ultimateLetter == 'y' && "aeiou".IndexOf(penultimateLetter) < 0)
-            {
-                return s.Substring(0, s.Length - 1) + "ies";
-            }
-            else
-                if (ultimateLetter == 's' || (ultimateLetter == 'h' && penultimateLetter == "s"))
-            {
-                return s + "es";
-            }
-            else
-            {
-                return s + "s";
-            }
-        }
-    }
-
+    
     public class IngredientEntry
     {
         public IngredientEntry()
@@ -235,16 +209,15 @@ namespace RecipeBook.Components
         public Ingredient Ingredient { get { return _ingredient; } }
         public Measurement Measurement { get { return _measurement; } }
         public double Amount { get { return _amount; } }
-
         public override string ToString()
         {
             string IngName = Ingredient.ing_Name;
             string MesName = Measurement.mes_Name;
             if(Amount > 1)
             {
-                MesName = Utilities.Pluralize(MesName);
+                MesName = Common.Pluralize(MesName);
                 if(Measurement.mes_Type == (int)MeasurementTypes.count)
-                    IngName = Utilities.Pluralize(IngName);
+                    IngName = Common.Pluralize(IngName);
             }
             if (Measurement.mes_Type == (int)MeasurementTypes.count)
                 return Amount.ToString() + " " + IngName;
