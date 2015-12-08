@@ -24,19 +24,40 @@ namespace RecipeBook
         public MainWindow()
         {
             InitializeComponent();
-            BuildComboBoxes();
+            BuildIngredientComboBox();
+            BuildMeasurementComboBox();
         }
         #region Fields
         List<IngredientEntry> _Ingredients = new List<IngredientEntry>();
         #endregion
 
         #region Methods
-        private void BuildComboBoxes()
+        private void BuildIngredientComboBox()
         {
-            using (RecipeBook_DataModelDataContext db = new RecipeBook_DataModelDataContext())
+            try
             {
-                cmb_IngredientNames.ItemsSource = db.Ingredients;
-                cmb_Measurement.ItemsSource = db.Measurements;
+                using (RecipeBook_DataModelDataContext db = new RecipeBook_DataModelDataContext())
+                {
+                    cmb_IngredientNames.ItemsSource = db.Ingredients;
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Building Ingredient Combobox failed: " + e.Message);
+            }
+        }
+        private void BuildMeasurementComboBox()
+        {
+            try
+            {
+                using (RecipeBook_DataModelDataContext db = new RecipeBook_DataModelDataContext())
+                {
+                    cmb_Measurement.ItemsSource = db.Measurements;
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Building Measurement Combobox failed: " + e.Message);
             }
         }
         private void RefreshIngredientList()
@@ -44,7 +65,6 @@ namespace RecipeBook
             lst_Ingredients.ItemsSource = null;
             lst_Ingredients.ItemsSource = _Ingredients;
         }
-
         public void NewRecipe()
         {
             foreach(TextBox c in MainGrid.Children.OfType<TextBox>())
@@ -158,16 +178,16 @@ namespace RecipeBook
         }
         private void EditIngredients_MenuItem_Click(object sender, RoutedEventArgs e)
         {
-            //EditMeasurements window;
-            //if (OwnedWindows.OfType<EditMeasurements>().Count() == 0)
-            //{
-            //    window = new EditMeasurements();
-            //}
-            //else
-            //{
-            //    window = OwnedWindows.OfType<EditMeasurements>().First();
-            //}
-            //window.Show();
+            EditIngredients window;
+            if (OwnedWindows.OfType<EditIngredients>().Count() == 0)
+            {
+                window = new EditIngredients();
+            }
+            else
+            {
+                window = OwnedWindows.OfType<EditIngredients>().First();
+            }
+            window.Show();
         }
         private void ViewRecipes_MenuItem_Click(object sender, RoutedEventArgs e)
         {
@@ -224,5 +244,11 @@ namespace RecipeBook
         }
         #endregion
 
+        private void MainWindow_Activated(object sender, EventArgs e)
+        {
+            BuildIngredientComboBox();
+            BuildMeasurementComboBox();
+            RefreshIngredientList();
+        }
     }
 }

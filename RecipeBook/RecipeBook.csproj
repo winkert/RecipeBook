@@ -71,6 +71,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="EditIngredients.xaml.cs">
+      <DependentUpon>EditIngredients.xaml</DependentUpon>
+    </Compile>
     <Compile Include="EditMeasurements.xaml.cs">
       <DependentUpon>EditMeasurements.xaml</DependentUpon>
     </Compile>
@@ -80,6 +83,10 @@
       <DependentUpon>RecipeBook_DataModel.dbml</DependentUpon>
     </Compile>
     <Compile Include="RecipeComponents.cs" />
+    <Page Include="EditIngredients.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="EditMeasurements.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RecipeBook"
         mc:Ignorable="d"
-        Title="Recipe Book" Height="400" Width="600">
+        Title="Recipe Book" Height="400" Width="600"
+        Activated="MainWindow_Activated">
     <Grid x:Name="MainGrid">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="87*"/>

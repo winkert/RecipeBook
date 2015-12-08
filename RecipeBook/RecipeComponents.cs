@@ -80,11 +80,6 @@ namespace RecipeBook.Components
                     m.mes_Type = (int)type;
                     db.Measurements.InsertOnSubmit(m);
                     db.SubmitChanges();
-                    //var q = from mes in db.Measurements select mes;
-                    //foreach (Measurement me in q)
-                    //{
-                    //    Console.WriteLine(me.ToString());
-                    //}
                 }
             }
             catch (Exception)
@@ -202,7 +197,7 @@ namespace RecipeBook.Components
                 return s.Substring(0, s.Length - 1) + "ies";
             }
             else
-                if (ultimateLetter == 's')
+                if (ultimateLetter == 's' || (ultimateLetter == 'h' && penultimateLetter == "s"))
             {
                 return s + "es";
             }
@@ -247,14 +242,14 @@ namespace RecipeBook.Components
             string MesName = Measurement.mes_Name;
             if(Amount > 1)
             {
-                IngName = Utilities.Pluralize(IngName);
                 MesName = Utilities.Pluralize(MesName);
+                if(Measurement.mes_Type == (int)MeasurementTypes.count)
+                    IngName = Utilities.Pluralize(IngName);
             }
             if (Measurement.mes_Type == (int)MeasurementTypes.count)
-            {
                 return Amount.ToString() + " " + IngName;
-            }
-            return Amount.ToString() + " " + MesName + " of " + IngName;
+            else
+                return Amount.ToString() + " " + MesName + " of " + IngName;
         }
     }
 
