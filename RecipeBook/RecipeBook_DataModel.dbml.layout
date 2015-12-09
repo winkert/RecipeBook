@@ -33,19 +33,25 @@
         <classShapeMoniker Id="df6ccd9a-ca1b-4abd-9028-bb9f5dd923ab" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(2.75 : 4.91429768880208); (3.88541416666667 : 4.91429768880208 : JumpStart); (4.05208083333333 : 4.91429768880208 : JumpEnd); (4.5 : 4.91429768880208); (4.5 : 2.64589680989583)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(2.75 : 4.71875); (3.88541416666667 : 4.71875 : JumpStart); (4.05208083333333 : 4.71875 : JumpEnd); (4.35937625 : 4.71875); (4.35937625 : 2.64589680989583)]" fixedFrom="Algorithm" fixedTo="Algorithm">
       <AssociationMoniker Name="/RecipeBook_DataModelDataContext/Measurement/Measurement_RecipeIngredient" />
       <nodes>
         <classShapeMoniker Id="023d4d7f-c296-4609-b8e8-b9af5442a622" />
         <classShapeMoniker Id="df6ccd9a-ca1b-4abd-9028-bb9f5dd923ab" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(2.75 : 7.57774983723958); (3.9687475 : 7.57774983723958); (3.9687475 : 2.64589680989583)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(2.75 : 7.57774983723958); (3.9687475 : 7.57774983723958); (3.9687475 : 2.64589680989583)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/RecipeBook_DataModelDataContext/Recipe/Recipe_RecipeIngredient" />
       <nodes>
         <classShapeMoniker Id="1db159f2-c0ba-472b-a9ab-f9d1294d86e2" />
         <classShapeMoniker Id="df6ccd9a-ca1b-4abd-9028-bb9f5dd923ab" />
       </nodes>
     </associationConnector>
+    <classShape Id="fedfcb69-0b83-4b89-931b-dc4f5b0d00c3" absoluteBounds="4.75, 5.375, 2, 1.7708968098958331">
+      <DataClassMoniker Name="/RecipeBook_DataModelDataContext/Full_Recipe" />
+      <nestedChildShapes>
+        <elementListCompartment Id="7ea55c0f-3412-46af-865d-31de059ef1d7" absoluteBounds="4.765, 5.835, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
   </nestedChildShapes>
 </ordesignerObjectsDiagram>

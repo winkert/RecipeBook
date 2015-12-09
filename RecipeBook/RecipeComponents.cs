@@ -130,6 +130,7 @@ namespace RecipeBook.Components
         {
             try
             {
+                int recid;
                 using (RecipeBook_DataModelDataContext db = new RecipeBook_DataModelDataContext())
                 {
                     Recipe rec = new Recipe();
@@ -141,9 +142,10 @@ namespace RecipeBook.Components
                     rec.rec_EntryDate = DateTime.Today;
                     db.Recipes.InsertOnSubmit(rec);
                     db.SubmitChanges();
-                    int recid = (from i in db.Recipes select i.rec_ID).Equals(null)
-                        ? (from i in db.Recipes orderby i.rec_ID descending select i.rec_ID).First() : 0;
-                    Console.WriteLine(recid.ToString());
+                    recid = rec.rec_ID;
+                }
+                using (RecipeBook_DataModelDataContext db = new RecipeBook_DataModelDataContext())
+                {
                     foreach (IngredientEntry i in ingredients)
                     {
                         RecipeIngredient recing = new RecipeIngredient();
@@ -211,6 +213,51 @@ namespace RecipeBook.Components
         }
     }
     
+    public class RecipeEntry
+    {
+        public RecipeEntry() { }
+        public RecipeEntry(string name, string description, string source, string prep, string cook, List<IngredientEntry> ingredients)
+        {
+            _ingredients = ingredients;
+            _name = name;
+            _description = description;
+            _source = source;
+            _prepinstructions = prep;
+            _cookinstructions = cook;
+    }
+        private List<IngredientEntry> _ingredients;
+        private string _name;
+        private string _description;
+        private string _source;
+        private string _prepinstructions;
+        private string _cookinstructions;
+        public List<IngredientEntry> Ingredients { get { return _ingredients; } }
+        public string Name { get { return _name; } }
+        public string Description { get { return _description; } }
+        public string Source { get { return _source; } }
+        public string PrepInstructions { get { return _prepinstructions; } }
+        public string CookInstructions { get { return _cookinstructions; } }
+        public override string ToString()
+        {
+            return Name + "(" + ConcatenateIngredients() + ")";
+        }
+        private string ConcatenateIngredients()
+        {
+            string ingredients = "";
+            int count = 0;
+            foreach(IngredientEntry i in _ingredients)
+            {
+                count++;
+                ingredients += i.Ingredient.ing_Name + "(" + i.Amount + " " + i.Measurement.mes_Name + ")";
+                if (count > 3)
+                    break;
+                else
+                    ingredients += ", ";
+            }
+            return ingredients;
+        }
+    }
+
     public class IngredientEntry
     {
         public IngredientEntry()

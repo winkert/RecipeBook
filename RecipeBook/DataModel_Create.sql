@@ -25,3 +25,14 @@ create table RecipeIngredients(
 	, mes_ID int foreign key references Measurements(mes_ID)
 	, ri_Amount float
 	)
+go
+--Recipe View
+create view Full_Recipes as (
+	select r.rec_Name, r.rec_Description
+		, ri.ri_Amount, m.mes_Name, i.ing_Name
+	from Recipes r
+	join RecipeIngredients ri on r.rec_ID = ri.rec_ID
+	join Ingredients i on ri.ing_ID = i.ing_ID
+	join Measurements m on ri.mes_ID = m.mes_ID
+	)
+go

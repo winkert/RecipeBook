@@ -105,6 +105,14 @@ namespace RecipeBook
 				return this.GetTable<RecipeIngredient>();
 			}
 		}
+		
+		public System.Data.Linq.Table<Full_Recipe> Full_Recipes
+		{
+			get
+			{
+				return this.GetTable<Full_Recipe>();
+			}
+		}
 	}
 	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Recipes")]
@@ -148,7 +156,10 @@ namespace RecipeBook
     partial void Onrec_EntryDateChanging(System.Nullable<System.DateTime> value);
     partial void Onrec_EntryDateChanged();
         #endregion
-
+        public override string ToString()
+        {
+            return rec_Name;
+        }
         public Recipe()
 		{
 			this._RecipeIngredients = new EntitySet<RecipeIngredient>(new Action<RecipeIngredient>(this.attach_RecipeIngredients), new Action<RecipeIngredient>(this.detach_RecipeIngredients));
@@ -924,6 +935,105 @@ namespace RecipeBook
 			if ((this.PropertyChanged != null))
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Full_Recipes")]
+	public partial class Full_Recipe
+	{
+		
+		private string _rec_Name;
+		
+		private string _rec_Description;
+		
+		private System.Nullable<double> _ri_Amount;
+		
+		private string _mes_Name;
+		
+		private string _ing_Name;
+		
+		public Full_Recipe()
+		{
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_rec_Name", DbType="VarChar(100)")]
+		public string rec_Name
+		{
+			get
+			{
+				return this._rec_Name;
+			}
+			set
+			{
+				if ((this._rec_Name != value))
+				{
+					this._rec_Name = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_rec_Description", DbType="VarChar(200)")]
+		public string rec_Description
+		{
+			get
+			{
+				return this._rec_Description;
+			}
+			set
+			{
+				if ((this._rec_Description != value))
+				{
+					this._rec_Description = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ri_Amount", DbType="Float")]
+		public System.Nullable<double> ri_Amount
+		{
+			get
+			{
+				return this._ri_Amount;
+			}
+			set
+			{
+				if ((this._ri_Amount != value))
+				{
+					this._ri_Amount = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_mes_Name", DbType="VarChar(30)")]
+		public string mes_Name
+		{
+			get
+			{
+				return this._mes_Name;
+			}
+			set
+			{
+				if ((this._mes_Name != value))
+				{
+					this._mes_Name = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ing_Name", DbType="VarChar(30)")]
+		public string ing_Name
+		{
+			get
+			{
+				return this._ing_Name;
+			}
+			set
+			{
+				if ((this._ing_Name != value))
+				{
+					this._ing_Name = value;
+				}
 			}
 		}
 	}

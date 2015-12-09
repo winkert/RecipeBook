@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Interop;
 
 namespace RecipeBook
 {
@@ -19,10 +18,11 @@ namespace RecipeBook
             InitializeComponent();
             BuildIngredientComboBox();
             BuildMeasurementComboBox();
-            ProcessWatcher.StartWatch();
+            BuildRecipeListBox();
         }
         #region Fields
         List<IngredientEntry> _Ingredients = new List<IngredientEntry>();
+        List<RecipeEntry> _Recipes = new List<RecipeEntry>();
         #endregion
 
         #region Methods
@@ -54,10 +54,43 @@ namespace RecipeBook
                 MessageBox.Show("Building Measurement Combobox failed: " + e.Message);
             }
         }
+        private void BuildRecipeListBox()
+        {
+            try
+            {
+                using (RecipeBook_DataModelDataContext db = new RecipeBook_DataModelDataContext())
+                {
+                    var r = from re in db.Recipes select re;
+                    foreach(Recipe re in r)
+                    {
+                        var i = from ing in db.Ingredients join ri in db.RecipeIngredients on ing.ing_ID equals ri.ing_ID where ri.rec_ID == re.rec_ID select ing;
+                        List<IngredientEntry> ingredients = new List<IngredientEntry>();
+                        foreach(Ingredient ing in i)
+                        {
+                            var m = from mes in db.RecipeIngredients where mes.ing_ID == ing.ing_ID && mes.rec_ID == re.rec_ID select mes.Measurement;
+                            var a = from mes in db.RecipeIngredients where mes.ing_ID == ing.ing_ID && mes.rec_ID == re.rec_ID select mes.ri_Amount;
+                            IngredientEntry ingred = new IngredientEntry(ing, m.First(), (double)a.First());
+                            ingredients.Add(ingred);
+                        }
+                        RecipeEntry rec = new RecipeEntry(re.rec_Name,re.rec_Description,re.rec_Source,re.rec_PreparationInstructions,re.rec_CookingInstructions, ingredients);
+                        _Recipes.Add(rec);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
+        }
         private void RefreshIngredientList()
         {
             lst_Ingredients.ItemsSource = null;
             lst_Ingredients.ItemsSource = _Ingredients;
+        }
+        private void RefreshRecipeList()
+        {
+            lst_Recipes.ItemsSource = null;
+            lst_Recipes.ItemsSource = _Recipes;
         }
         public void NewRecipe()
         {
@@ -78,6 +111,9 @@ namespace RecipeBook
             {
                 MessageBox.Show(e.Message);
             }
+            RecipeEntry _rec = new RecipeEntry(txt_RecipeName.Text, txt_RecipeSource.Text, txt_RecipeDescription.Text, txt_RecipePrepInstructions.Text, txt_RecipeCookInstructions.Text, _Ingredients);
+            _Recipes.Add(_rec);
+            RefreshRecipeList();
         }
 
         #region Data Validation
@@ -247,20 +283,9 @@ namespace RecipeBook
 
         private void MainWindow_Activated(object sender, EventArgs e)
         {
-            HwndSource hwnds = HwndSource.FromHwnd(ProcessWatcher.LastHandle);
-            Window LastActiveWindow = hwnds.RootVisual as Window;
-            if (LastActiveWindow != null)
-            {
-                if (LastActiveWindow is EditIngredients)
-                {
-                    BuildIngredientComboBox();
-                }
-                else if (LastActiveWindow is EditMeasurements)
-                {
-                    BuildMeasurementComboBox();
-                }
-                RefreshIngredientList(); 
-            }
+            BuildIngredientComboBox();
+            BuildMeasurementComboBox();
+            RefreshIngredientList();
         }
     }
 }

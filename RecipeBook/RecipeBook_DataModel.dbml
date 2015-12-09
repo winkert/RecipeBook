@@ -41,4 +41,13 @@
       <Association Name="Recipe_RecipeIngredient" Member="Recipe" ThisKey="rec_ID" OtherKey="rec_ID" Type="Recipe" IsForeignKey="true" />
     </Type>
   </Table>
+  <Table Name="dbo.Full_Recipes" Member="Full_Recipes">
+    <Type Name="Full_Recipe">
+      <Column Name="rec_Name" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
+      <Column Name="rec_Description" Type="System.String" DbType="VarChar(200)" CanBeNull="true" />
+      <Column Name="ri_Amount" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="mes_Name" Type="System.String" DbType="VarChar(30)" CanBeNull="true" />
+      <Column Name="ing_Name" Type="System.String" DbType="VarChar(30)" CanBeNull="true" />
+    </Type>
+  </Table>
 </Database>
