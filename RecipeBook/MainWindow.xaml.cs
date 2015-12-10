@@ -23,9 +23,11 @@ namespace RecipeBook
         #region Fields
         List<IngredientEntry> _Ingredients = new List<IngredientEntry>();
         List<RecipeEntry> _Recipes = new List<RecipeEntry>();
+        int SelectedRecipe = -1;
         #endregion
 
         #region Methods
+        #region Dynamic Fields
         private void BuildIngredientComboBox()
         {
             try
@@ -72,10 +74,11 @@ namespace RecipeBook
                             IngredientEntry ingred = new IngredientEntry(ing, m.First(), (double)a.First());
                             ingredients.Add(ingred);
                         }
-                        RecipeEntry rec = new RecipeEntry(re.rec_Name,re.rec_Description,re.rec_Source,re.rec_PreparationInstructions,re.rec_CookingInstructions, ingredients);
+                        RecipeEntry rec = new RecipeEntry(re.rec_Name,re.rec_Description,re.rec_Source,re.rec_PreparationInstructions,re.rec_CookingInstructions, ingredients, re.rec_ID);
                         _Recipes.Add(rec);
                     }
                 }
+                lst_Recipes.ItemsSource = _Recipes;
             }
             catch (Exception e)
             {
@@ -92,30 +95,48 @@ namespace RecipeBook
             lst_Recipes.ItemsSource = null;
             lst_Recipes.ItemsSource = _Recipes;
         }
+        #endregion
         public void NewRecipe()
         {
             foreach(TextBox c in MainGrid.Children.OfType<TextBox>())
             {
                 c.Text = string.Empty;
             }
+            lst_Recipes.SelectedIndex = -1;
             _Ingredients.Clear();
             RefreshIngredientList();
+            txt_RecipeName.Focus();
         }
         public void SaveRecipe()
         {
+            int id;
             try
             {
-                Recipes.InsertRecipe(txt_RecipeName.Text, txt_RecipeSource.Text, txt_RecipeDescription.Text, txt_RecipePrepInstructions.Text, txt_RecipeCookInstructions.Text, _Ingredients);
+                Recipes.InsertRecipe(txt_RecipeName.Text, txt_RecipeSource.Text, txt_RecipeDescription.Text, txt_RecipePrepInstructions.Text, txt_RecipeCookInstructions.Text, _Ingredients, out id);
             }
             catch (Exception e)
             {
+                id = -1;
                 MessageBox.Show(e.Message);
             }
-            RecipeEntry _rec = new RecipeEntry(txt_RecipeName.Text, txt_RecipeSource.Text, txt_RecipeDescription.Text, txt_RecipePrepInstructions.Text, txt_RecipeCookInstructions.Text, _Ingredients);
+            RecipeEntry _rec = new RecipeEntry(txt_RecipeName.Text, txt_RecipeSource.Text, txt_RecipeDescription.Text, txt_RecipePrepInstructions.Text, txt_RecipeCookInstructions.Text, _Ingredients, id);
             _Recipes.Add(_rec);
             RefreshRecipeList();
         }
-
+        public void NewIngredient()
+        {
+            cmb_IngredientNames.SelectedIndex = -1;
+            cmb_Measurement.SelectedIndex = -1;
+            txt_Amount.Text = string.Empty;
+            cmb_IngredientNames.Focus();
+        }
+        public void SaveIngredient()
+        {
+            Ingredient i = (Ingredient)cmb_IngredientNames.SelectedItem;
+            Measurement m = (Measurement)cmb_Measurement.SelectedItem;
+            IngredientEntry iEntry = new IngredientEntry(i, m, txt_Amount.Text);
+            _Ingredients.Add(iEntry);
+        }
         #region Data Validation
         /// <summary>
         /// Checks if the current recipe has been saved based on the values of the text fields.
@@ -178,12 +199,18 @@ namespace RecipeBook
         {
             if (!HasSaved())
             {
-                SaveRecipe(); 
+                SaveRecipe();
             }
             else
             {
                 MessageBox.Show("There is no recipe to save.");
             }
+        }
+        private void DeleteRecipe_MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            Recipes.DeleteRecipe(SelectedRecipe);
+            _Recipes.RemoveAt(lst_Recipes.SelectedIndex);
+            RefreshRecipeList();
         }
         private void Exit_MenuItem_Click(object sender, RoutedEventArgs e)
         {
@@ -228,16 +255,16 @@ namespace RecipeBook
         }
         private void ViewRecipes_MenuItem_Click(object sender, RoutedEventArgs e)
         {
-            //EditMeasurements window;
-            //if (OwnedWindows.OfType<EditMeasurements>().Count() == 0)
-            //{
-            //    window = new EditMeasurements();
-            //}
-            //else
-            //{
-            //    window = OwnedWindows.OfType<EditMeasurements>().First();
-            //}
-            //window.Show();
+            ViewRecipes window;
+            if (OwnedWindows.OfType<ViewRecipes>().Count() == 0)
+            {
+                window = new ViewRecipes();
+            }
+            else
+            {
+                window = OwnedWindows.OfType<ViewRecipes>().First();
+            }
+            window.Show();
         }
 
         #region Ingredient Events
@@ -250,21 +277,19 @@ namespace RecipeBook
             }
             else
             {
-                Ingredient i = (Ingredient)cmb_IngredientNames.SelectedItem;
-                Measurement m = (Measurement)cmb_Measurement.SelectedItem;
-                IngredientEntry iEntry = new IngredientEntry(i, m, txt_Amount.Text);
-                _Ingredients.Add(iEntry);
+                SaveIngredient();
             }
             RefreshIngredientList();
+            NewIngredient();
         }
         private void btn_DelIngredient_Click(object sender, RoutedEventArgs e)
         {
             _Ingredients.RemoveAt(lst_Ingredients.SelectedIndex);
             RefreshIngredientList();
+            NewIngredient();
         }
         private void lst_Ingredients_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
             if (lst_Ingredients.SelectedIndex > -1)
             {
                 IngredientEntry sel = _Ingredients[lst_Ingredients.SelectedIndex];
@@ -286,6 +311,35 @@ namespace RecipeBook
             BuildIngredientComboBox();
             BuildMeasurementComboBox();
             RefreshIngredientList();
+            //RefreshRecipeList();
         }
+
+        private void lst_Recipes_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (lst_Recipes.SelectedIndex > -1)
+            {
+                RecipeEntry sel = _Recipes[lst_Recipes.SelectedIndex];
+                txt_RecipeName.Text = sel.Name;
+                txt_RecipeDescription.Text = sel.Description;
+                txt_RecipePrepInstructions.Text = sel.PrepInstructions;
+                txt_RecipeCookInstructions.Text = sel.CookInstructions;
+                txt_RecipeSource.Text = sel.Source;
+                _Ingredients = sel.Ingredients;
+                RefreshIngredientList();
+                SelectedRecipe = sel.recID;
+            }
+            else
+            {
+                txt_RecipeName.Text = string.Empty;
+                txt_RecipeDescription.Text = string.Empty;
+                txt_RecipePrepInstructions.Text = string.Empty;
+                txt_RecipeCookInstructions.Text = string.Empty;
+                txt_RecipeSource.Text = string.Empty;
+                _Ingredients = new List<IngredientEntry>();
+                RefreshIngredientList();
+                SelectedRecipe = -1;
+            }
+        }
+        
     }
 }

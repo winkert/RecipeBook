@@ -28,7 +28,7 @@ create table RecipeIngredients(
 go
 --Recipe View
 create view Full_Recipes as (
-	select r.rec_Name, r.rec_Description
+	select r.rec_Name, r.rec_Description, r.rec_Source, r.rec_EntryDate
 		, ri.ri_Amount, m.mes_Name, i.ing_Name
 	from Recipes r
 	join RecipeIngredients ri on r.rec_ID = ri.rec_ID

@@ -20,6 +20,7 @@
             <MenuItem Header="File">
                 <MenuItem Header="New Recipe" Click="NewRecipe_MenuItem_Click"/>
                 <MenuItem Header="Save Recipe" Click="SaveRecipe_MenuItem_Click"/>
+                <MenuItem Header="Delete Recipe" Click="DeleteRecipe_MenuItem_Click"/>
                 <MenuItem Header="Exit" Click="Exit_MenuItem_Click"/>
             </MenuItem>
             <MenuItem Header="Tools">
@@ -28,7 +29,8 @@
                 <MenuItem Header="View Recipes" Click="ViewRecipes_MenuItem_Click"/>
             </MenuItem>
         </Menu>
-        <Border Margin="10,112,10,0" Grid.Row="1" BorderBrush="#FFA4A4A4" BorderThickness="1" Height="345" VerticalAlignment="Top">
+        <ListBox x:Name="lst_Recipes" Height="96" Margin="10,11,10,0" Grid.Row="1" VerticalAlignment="Top" TabIndex="0" SelectionChanged="lst_Recipes_SelectionChanged" Grid.ColumnSpan="2"/>
+        <Border Margin="10,112,10,0" Grid.Row="1" Height="345" VerticalAlignment="Top">
             <Grid x:Name="RecipeEntry" HorizontalAlignment="Left" Width="343" Margin="0,0,-1,9">
                 <Label x:Name="l_RecipeName" Content="Recipe Name" HorizontalAlignment="Left" Grid.Column="0" VerticalAlignment="Top"/>
                 <TextBox x:Name="txt_RecipeName" HorizontalAlignment="Left" Height="23" Margin="85,0,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="243" TabIndex="0" MaxLength="100"/>
@@ -42,15 +44,20 @@
                 <TextBox x:Name="txt_RecipeCookInstructions" HorizontalAlignment="Left" Margin="0,259,0,0" Grid.Column="0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="65" Width="328" TabIndex="4" MaxLength="500"/>
             </Grid>
         </Border>
-        <ListBox x:Name="lst_Ingredients" Grid.Column="1" Height="234" Margin="10,112,0,0" Grid.Row="1" VerticalAlignment="Top" TabIndex="5" SelectionChanged="lst_Ingredients_SelectionChanged" HorizontalAlignment="Left" Width="225"/>
-        <Label x:Name="l_IngredientName" Content="Ingredient" Grid.Column="1" HorizontalAlignment="Left" Margin="10,351,0,0" Grid.Row="1" VerticalAlignment="Top" Height="26" Width="65"/>
-        <ComboBox x:Name="cmb_IngredientNames" Grid.Column="1" HorizontalAlignment="Left" Margin="80,351,0,0" Grid.Row="1" VerticalAlignment="Top" Width="154" TabIndex="6" Height="22"/>
-        <Label x:Name="l_Measurement" Content="Measurement" Grid.Column="1" HorizontalAlignment="Left" Margin="10,382,0,-30" Grid.Row="1" VerticalAlignment="Top" Height="26" Width="83"/>
-        <ComboBox x:Name="cmb_Measurement" Grid.Column="1" HorizontalAlignment="Left" Margin="98,382,0,-26" Grid.Row="1" VerticalAlignment="Top" Width="136" TabIndex="7" Height="22"/>
-        <Label x:Name="l_Amount" Content="Amount" Grid.Column="1" HorizontalAlignment="Left" Margin="19,413,0,-61" Grid.Row="1" VerticalAlignment="Top" Height="26" Width="53"/>
-        <TextBox x:Name="txt_Amount" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="80,413,0,-58" Grid.Row="1" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="38" TabIndex="8" MaxLength="4"/>
-        <Button x:Name="btn_AddIngredient" Content="Add" Grid.Column="1" HorizontalAlignment="Left" Margin="123,413,0,-55" Grid.Row="1" VerticalAlignment="Top" Width="43" TabIndex="9" Click="btn_AddIngredient_Click" Height="20"/>
-        <Button x:Name="btn_DelIngredient" Content="Delete" Grid.Column="1" HorizontalAlignment="Left" Margin="184,413,0,-55" Grid.Row="1" VerticalAlignment="Top" Width="50" TabIndex="10" Click="btn_DelIngredient_Click" Height="20"/>
-        <ListBox x:Name="lst_Recipes" HorizontalAlignment="Left" Height="96" Margin="10,11,0,0" Grid.Row="1" VerticalAlignment="Top" Width="346" TabIndex="0"/>
+        <Border Grid.Column="1" Margin="10,112,18,19" Grid.Row="1">
+            <Grid>
+                <ListBox x:Name="lst_Ingredients" Height="234" VerticalAlignment="Top" TabIndex="5" SelectionChanged="lst_Ingredients_SelectionChanged" HorizontalAlignment="Left" Width="225"/>
+                <Label x:Name="l_IngredientName" Content="Ingredient" HorizontalAlignment="Left" Margin="0,239,0,0" VerticalAlignment="Top" Height="26" Width="65"/>
+                <ComboBox x:Name="cmb_IngredientNames" HorizontalAlignment="Left" Margin="70,239,0,0" VerticalAlignment="Top" Width="154" TabIndex="6" Height="22"/>
+                <Label x:Name="l_Measurement" Content="Measurement" HorizontalAlignment="Left" Margin="0,270,0,0" VerticalAlignment="Top" Height="26" Width="83"/>
+                <ComboBox x:Name="cmb_Measurement" HorizontalAlignment="Left" Margin="88,270,0,0" VerticalAlignment="Top" Width="136" TabIndex="7" Height="22"/>
+                <Label x:Name="l_Amount" Content="Amount" HorizontalAlignment="Left" Margin="9,301,0,0" VerticalAlignment="Top" Height="26" Width="53"/>
+                <TextBox x:Name="txt_Amount" HorizontalAlignment="Left" Height="23" Margin="70,301,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="38" TabIndex="8" MaxLength="4"/>
+                <Button x:Name="btn_AddIngredient" Content="Add" HorizontalAlignment="Left" Margin="113,301,0,0" VerticalAlignment="Top" Width="43" TabIndex="9" Click="btn_AddIngredient_Click" Height="20"/>
+                <Button x:Name="btn_DelIngredient" Content="Delete" HorizontalAlignment="Left" Margin="174,301,0,0" VerticalAlignment="Top" Width="50" TabIndex="10" Click="btn_DelIngredient_Click" Height="20"/>
+
+            </Grid>
+        </Border>
+
     </Grid>
 </Window>

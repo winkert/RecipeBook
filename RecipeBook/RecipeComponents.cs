@@ -126,11 +126,10 @@ namespace RecipeBook.Components
         }
         #endregion
         #region Recipes
-        public static void InsertRecipe(string name, string source, string description, string prep, string cook, List<IngredientEntry> ingredients)
+        public static void InsertRecipe(string name, string source, string description, string prep, string cook, List<IngredientEntry> ingredients, out int recid)
         {
             try
             {
-                int recid;
                 using (RecipeBook_DataModelDataContext db = new RecipeBook_DataModelDataContext())
                 {
                     Recipe rec = new Recipe();
@@ -166,7 +165,7 @@ namespace RecipeBook.Components
             }
             catch (Exception)
             {
-
+                recid = -1;
                 throw;
             }
         }
@@ -195,6 +194,12 @@ namespace RecipeBook.Components
                     db.RecipeIngredients.DeleteAllOnSubmit(recings);
                     db.SubmitChanges();
                 }
+                using (RecipeBook_DataModelDataContext db = new RecipeBook_DataModelDataContext())
+                {
+                    var rec = from r in db.Recipes where r.rec_ID == rec_ID select r;
+                    db.Recipes.DeleteOnSubmit(rec.First());
+                    db.SubmitChanges();
+                }
             }
             catch (Exception)
             {
@@ -216,7 +221,7 @@ namespace RecipeBook.Components
     public class RecipeEntry
     {
         public RecipeEntry() { }
-        public RecipeEntry(string name, string description, string source, string prep, string cook, List<IngredientEntry> ingredients)
+        public RecipeEntry(string name, string description, string source, string prep, string cook, List<IngredientEntry> ingredients, int id)
         {
             _ingredients = ingredients;
             _name = name;
@@ -224,6 +229,7 @@ namespace RecipeBook.Components
             _source = source;
             _prepinstructions = prep;
             _cookinstructions = cook;
+            recID = id;
     }
         private List<IngredientEntry> _ingredients;
         private string _name;
@@ -231,6 +237,7 @@ namespace RecipeBook.Components
         private string _source;
         private string _prepinstructions;
         private string _cookinstructions;
+        public int recID;
         public List<IngredientEntry> Ingredients { get { return _ingredients; } }
         public string Name { get { return _name; } }
         public string Description { get { return _description; } }
@@ -260,10 +267,7 @@ namespace RecipeBook.Components
 
     public class IngredientEntry
     {
-        public IngredientEntry()
-        {
-
-        }
+        public IngredientEntry() { }
         public IngredientEntry(Ingredient i, Measurement m, double amount)
         {
             _ingredient = i;
