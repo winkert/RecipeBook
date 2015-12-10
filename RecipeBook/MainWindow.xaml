@@ -28,6 +28,10 @@
                 <MenuItem Header="Edit Ingredients" Click="EditIngredients_MenuItem_Click"/>
                 <MenuItem Header="View Recipes" Click="ViewRecipes_MenuItem_Click"/>
             </MenuItem>
+            <MenuItem Header="Export">
+                <MenuItem Header="Print Recipe" Click="PrintRecipe_MenuItem_Click"/>
+                <MenuItem Header="Print All Recipes" Click="PrintAllRecipes_MenuItem_Click_1"/>
+            </MenuItem>
         </Menu>
         <ListBox x:Name="lst_Recipes" Height="96" Margin="10,11,10,0" Grid.Row="1" VerticalAlignment="Top" TabIndex="0" SelectionChanged="lst_Recipes_SelectionChanged" Grid.ColumnSpan="2"/>
         <Border Margin="10,112,10,0" Grid.Row="1" Height="345" VerticalAlignment="Top">

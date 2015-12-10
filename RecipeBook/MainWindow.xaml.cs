@@ -340,6 +340,15 @@ namespace RecipeBook
                 SelectedRecipe = -1;
             }
         }
-        
+
+        private void PrintRecipe_MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            PDFPrinter.SingleRecipePDF(_Recipes[lst_Recipes.SelectedIndex], "C:\\Users\\twinker\\Desktop\\test.pdf", true);
+        }
+
+        private void PrintAllRecipes_MenuItem_Click_1(object sender, RoutedEventArgs e)
+        {
+            PDFPrinter.AllRecipesPDF(_Recipes, "C:\\Users\\twinker\\Desktop\\testAll.pdf", true);
+        }
     }
 }
