@@ -1,4 +1,6 @@
-﻿using PdfSharp.Drawing;
+﻿using MigraDoc.DocumentObjectModel;
+using MigraDoc.Rendering;
+using PdfSharp.Drawing;
 using PdfSharp.Drawing.Layout;
 using PdfSharp.Pdf;
 using RecipeBook.Components;
@@ -15,28 +17,38 @@ namespace RecipeBook.Utilities
     {
         public static void SingleRecipePDF(RecipeEntry recipe, string filename, bool preview)
         {
-            PdfDocument file = new PdfDocument();
+            const bool unicode = false;
+            const PdfFontEmbedding embedding = PdfFontEmbedding.Always;
+            Document file = new Document();
             file.Info.Title = recipe.Name;
-            PdfPage page = file.AddPage();
-            DrawRecipe(recipe, ref page);
-            file.Save(filename);
+            Section section = file.AddSection();
+            DrawRecipe(recipe, ref section);
+            PdfDocumentRenderer pdfRenderer = new PdfDocumentRenderer(unicode, embedding);
+            pdfRenderer.Document = file;
+            pdfRenderer.RenderDocument();
+            pdfRenderer.Save(filename);
             if (preview)
                 Process.Start(filename);
         }
         public static void AllRecipesPDF(List<RecipeEntry> recipes, string filename, bool preview)
         {
-            PdfDocument file = new PdfDocument();
+            const bool unicode = false;
+            const PdfFontEmbedding embedding = PdfFontEmbedding.Always;
+            Document file = new Document();
             file.Info.Title = "Recipe Book";
             foreach (RecipeEntry recipe in recipes)
             {
-                PdfPage page = file.AddPage();
-                DrawRecipe(recipe, ref page); 
+                Section section = file.AddSection();
+                DrawRecipe(recipe, ref section);
             }
-            file.Save(filename);
+            PdfDocumentRenderer pdfRenderer = new PdfDocumentRenderer(unicode, embedding);
+            pdfRenderer.Document = file;
+            pdfRenderer.RenderDocument();
+            pdfRenderer.Save(filename);
             if (preview)
                 Process.Start(filename);
         }
-        private static void DrawRecipe(RecipeEntry recipe, ref PdfPage page)
+        private static void DrawRecipe(RecipeEntry recipe, ref Section section)
         {
             ///<example>
             ///     [Recipe Name]                   [Recipe Source]
@@ -45,12 +57,11 @@ namespace RecipeBook.Utilities
             ///  [Recipe Preparation Instructions]
             ///  [Recipe Cooking Instructions]
             /// </example>
-            XGraphics gfx = XGraphics.FromPdfPage(page);
-            XTextFormatter tfx = new XTextFormatter(gfx);
+            Paragraph paragraph = section.AddParagraph();
             //tfx.Alignment = XParagraphAlignment.Left;
             double width = 1024;
-            XFont header = new XFont("Times New Roman", 20, XFontStyle.Bold);
-            XFont body = new XFont("Times New Roman", 14);
+            Font header = new Font("Times New Roman Bold", 20);
+            Font body = new Font("Times New Roman", 14);
             XBrush black = XBrushes.Black;
             double lineheight = 15;
             double cpl = 100; //Characters per Line
@@ -59,17 +70,20 @@ namespace RecipeBook.Utilities
             double PrepHeight = (recipe.PrepInstructions.Length / cpl) * lineheight;
             double CookHeight = (recipe.CookInstructions.Length / cpl) * lineheight;
             XRect bounding = new XRect(30, 30, width, lineheight);
-            tfx.DrawString(recipe.Name, header, black, bounding, XStringFormats.TopLeft);
-            bounding = new XRect(300, 30, width, lineheight);
-            tfx.DrawString(recipe.Source, header, black, bounding, XStringFormats.TopLeft);
-            bounding = new XRect(10, 60, width, DescHeight);
-            tfx.DrawString(recipe.Description, body, black, bounding, XStringFormats.TopLeft);
+            paragraph.AddFormattedText(recipe.Name, header);
+
+            //tfx.DrawString(recipe.Name, header, black, bounding, XStringFormats.TopLeft);
+            //bounding = new XRect(300, 30, width, lineheight);
+            //tfx.DrawString(recipe.Source, header, black, bounding, XStringFormats.TopLeft);
+            //bounding = new XRect(10, 60, width, DescHeight);
+            //tfx.DrawString(recipe.Description, body, black, bounding, XStringFormats.TopLeft);
             double spacing = 0;
             int count = 1;
             foreach(IngredientEntry i in recipe.Ingredients)
             {
                 bounding = new XRect(20, 70 + DescHeight + spacing, width, lineheight);
-                tfx.DrawString(count.ToString() + ") " + i.ToString(), body, black, bounding, XStringFormats.TopLeft);
+                
+                //tfx.DrawString(count.ToString() + ") " + i.ToString(), body, black, bounding, XStringFormats.TopLeft);
                 spacing += lineheight;
                 count++;
             }

@@ -180,7 +180,6 @@ namespace RecipeBook.Components
             }
             catch (Exception)
             {
-
                 throw;
             }
         }

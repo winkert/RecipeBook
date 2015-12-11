@@ -110,17 +110,33 @@ namespace RecipeBook
         public void SaveRecipe()
         {
             int id;
-            try
+            if (SelectedRecipe == -1)
             {
-                Recipes.InsertRecipe(txt_RecipeName.Text, txt_RecipeSource.Text, txt_RecipeDescription.Text, txt_RecipePrepInstructions.Text, txt_RecipeCookInstructions.Text, _Ingredients, out id);
+                try
+                {
+                    Recipes.InsertRecipe(txt_RecipeName.Text, txt_RecipeSource.Text, txt_RecipeDescription.Text, txt_RecipePrepInstructions.Text, txt_RecipeCookInstructions.Text, _Ingredients, out id);
+                }
+                catch (Exception e)
+                {
+                    id = -1;
+                    MessageBox.Show(e.Message);
+                }
+                RecipeEntry _rec = new RecipeEntry(txt_RecipeName.Text, txt_RecipeSource.Text, txt_RecipeDescription.Text, txt_RecipePrepInstructions.Text, txt_RecipeCookInstructions.Text, _Ingredients, id);
+                _Recipes.Add(_rec); 
             }
-            catch (Exception e)
+            else
             {
-                id = -1;
-                MessageBox.Show(e.Message);
+                id = SelectedRecipe;
+                try
+                {
+                    Recipes.UpdateRecipe(txt_RecipeName.Text, txt_RecipeSource.Text, txt_RecipeDescription.Text, txt_RecipePrepInstructions.Text, txt_RecipeCookInstructions.Text, _Ingredients, id);
+                }
+                catch(Exception e)
+                {
+                    id = -1;
+                    MessageBox.Show(e.Message);
+                }
             }
-            RecipeEntry _rec = new RecipeEntry(txt_RecipeName.Text, txt_RecipeSource.Text, txt_RecipeDescription.Text, txt_RecipePrepInstructions.Text, txt_RecipeCookInstructions.Text, _Ingredients, id);
-            _Recipes.Add(_rec);
             RefreshRecipeList();
         }
         public void NewIngredient()
