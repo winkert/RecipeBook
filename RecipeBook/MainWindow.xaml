@@ -30,7 +30,7 @@
             </MenuItem>
             <MenuItem Header="Export">
                 <MenuItem Header="Print Recipe" Click="PrintRecipe_MenuItem_Click"/>
-                <MenuItem Header="Print All Recipes" Click="PrintAllRecipes_MenuItem_Click_1"/>
+                <MenuItem Header="Print All Recipes" Click="PrintAllRecipes_MenuItem_Click"/>
             </MenuItem>
         </Menu>
         <ListBox x:Name="lst_Recipes" Height="96" Margin="10,11,10,0" Grid.Row="1" VerticalAlignment="Top" TabIndex="0" SelectionChanged="lst_Recipes_SelectionChanged" Grid.ColumnSpan="2"/>

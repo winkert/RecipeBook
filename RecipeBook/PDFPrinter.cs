@@ -1,15 +1,9 @@
 ﻿using MigraDoc.DocumentObjectModel;
 using MigraDoc.Rendering;
-using PdfSharp.Drawing;
-using PdfSharp.Drawing.Layout;
 using PdfSharp.Pdf;
 using RecipeBook.Components;
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RecipeBook.Utilities
 {
@@ -57,40 +51,52 @@ namespace RecipeBook.Utilities
             ///  [Recipe Preparation Instructions]
             ///  [Recipe Cooking Instructions]
             /// </example>
-            Paragraph paragraph = section.AddParagraph();
-            //tfx.Alignment = XParagraphAlignment.Left;
-            double width = 1024;
+            Paragraph headerText = section.AddParagraph();
+            Paragraph DescParagraph = section.AddParagraph();
+            Paragraph ingredientList = section.AddParagraph();
+            Paragraph PrepInstr = section.AddParagraph();
+            Paragraph CookInstr = section.AddParagraph();
             Font header = new Font("Times New Roman Bold", 20);
             Font body = new Font("Times New Roman", 14);
-            XBrush black = XBrushes.Black;
-            double lineheight = 15;
-            double cpl = 100; //Characters per Line
-            double DescHeight = (recipe.Description.Length / cpl) * lineheight;
-            double IngredientHeight = (recipe.Ingredients.Count) * (lineheight + 5);
-            double PrepHeight = (recipe.PrepInstructions.Length / cpl) * lineheight;
-            double CookHeight = (recipe.CookInstructions.Length / cpl) * lineheight;
-            XRect bounding = new XRect(30, 30, width, lineheight);
-            paragraph.AddFormattedText(recipe.Name, header);
-
-            //tfx.DrawString(recipe.Name, header, black, bounding, XStringFormats.TopLeft);
-            //bounding = new XRect(300, 30, width, lineheight);
-            //tfx.DrawString(recipe.Source, header, black, bounding, XStringFormats.TopLeft);
-            //bounding = new XRect(10, 60, width, DescHeight);
-            //tfx.DrawString(recipe.Description, body, black, bounding, XStringFormats.TopLeft);
-            double spacing = 0;
+            headerText.Format = HeaderFormatter();
+            headerText.AddFormattedText(recipe.Name, header);
+            headerText.AddLineBreak();
+            headerText.AddFormattedText("(" + recipe.Source + ")", new Font("Times New Roman", 16));
+            DescParagraph.Format = BodyFormatter();
+            DescParagraph.AddFormattedText(recipe.Description, body);
+            ingredientList.Format = IngredientFormatter();
             int count = 1;
-            foreach(IngredientEntry i in recipe.Ingredients)
+            foreach (IngredientEntry i in recipe.Ingredients)
             {
-                bounding = new XRect(20, 70 + DescHeight + spacing, width, lineheight);
-                
-                //tfx.DrawString(count.ToString() + ") " + i.ToString(), body, black, bounding, XStringFormats.TopLeft);
-                spacing += lineheight;
+                string entry = count.ToString() + ") " + i.ToString();
+                ingredientList.AddFormattedText(entry, body);
+                ingredientList.AddLineBreak();
                 count++;
             }
-            bounding = new XRect(10, 70 + DescHeight + IngredientHeight, width, PrepHeight);
-            tfx.DrawString(recipe.PrepInstructions, body, black, bounding, XStringFormats.TopLeft);
-            bounding = new XRect(10, 80 + DescHeight + IngredientHeight + PrepHeight, width, CookHeight);
-            tfx.DrawString(recipe.CookInstructions, body, black, bounding, XStringFormats.TopLeft);
+            PrepInstr.Format = BodyFormatter();
+            PrepInstr.AddFormattedText(recipe.PrepInstructions, body);
+            CookInstr.Format = BodyFormatter();
+            CookInstr.AddFormattedText(recipe.CookInstructions, body);
+        }
+        private static ParagraphFormat HeaderFormatter()
+        {
+            ParagraphFormat headerformat = new ParagraphFormat();
+            headerformat.SpaceAfter = new Unit(20);
+            return headerformat;
+        }
+        private static ParagraphFormat IngredientFormatter()
+        {
+            ParagraphFormat ingredientformat = new ParagraphFormat();
+            ingredientformat.LeftIndent = new Unit(15);
+            ingredientformat.SpaceAfter = new Unit(15);
+            return ingredientformat;
+        }
+        private static ParagraphFormat BodyFormatter()
+        {
+            ParagraphFormat bodyformat = new ParagraphFormat();
+            bodyformat.FirstLineIndent = new Unit(20);
+            bodyformat.SpaceAfter = new Unit(15);
+            return bodyformat;
         }
     }
 }
