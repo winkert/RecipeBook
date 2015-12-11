@@ -9,25 +9,29 @@ namespace RecipeBook.Utilities
 {
     public static class PDFPrinter
     {
+        #region Public Methods
+        /// <summary>
+        /// Create a pdf file of a single recipe
+        /// </summary>
+        /// <param name="recipe">Recipe Entry</param>
+        /// <param name="filename">string of save location</param>
+        /// <param name="preview">bool</param>
         public static void SingleRecipePDF(RecipeEntry recipe, string filename, bool preview)
         {
-            const bool unicode = false;
-            const PdfFontEmbedding embedding = PdfFontEmbedding.Always;
             Document file = new Document();
             file.Info.Title = recipe.Name;
             Section section = file.AddSection();
             DrawRecipe(recipe, ref section);
-            PdfDocumentRenderer pdfRenderer = new PdfDocumentRenderer(unicode, embedding);
-            pdfRenderer.Document = file;
-            pdfRenderer.RenderDocument();
-            pdfRenderer.Save(filename);
-            if (preview)
-                Process.Start(filename);
+            SavePDF(file, filename, preview);
         }
+        /// <summary>
+        /// Create a pdf file of all recipes
+        /// </summary>
+        /// <param name="recipes">List of Recipe Entries</param>
+        /// <param name="filename">string of save location</param>
+        /// <param name="preview">bool</param>
         public static void AllRecipesPDF(List<RecipeEntry> recipes, string filename, bool preview)
         {
-            const bool unicode = false;
-            const PdfFontEmbedding embedding = PdfFontEmbedding.Always;
             Document file = new Document();
             file.Info.Title = "Recipe Book";
             foreach (RecipeEntry recipe in recipes)
@@ -35,6 +39,13 @@ namespace RecipeBook.Utilities
                 Section section = file.AddSection();
                 DrawRecipe(recipe, ref section);
             }
+            SavePDF(file, filename, preview);
+        }
+        #endregion
+        private static void SavePDF(Document file,string filename, bool preview)
+        {
+            const bool unicode = false;
+            const PdfFontEmbedding embedding = PdfFontEmbedding.Always;
             PdfDocumentRenderer pdfRenderer = new PdfDocumentRenderer(unicode, embedding);
             pdfRenderer.Document = file;
             pdfRenderer.RenderDocument();
@@ -78,6 +89,7 @@ namespace RecipeBook.Utilities
             CookInstr.Format = BodyFormatter();
             CookInstr.AddFormattedText(recipe.CookInstructions, body);
         }
+
         private static ParagraphFormat HeaderFormatter()
         {
             ParagraphFormat headerformat = new ParagraphFormat();

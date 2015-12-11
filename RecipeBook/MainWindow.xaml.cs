@@ -26,7 +26,6 @@ namespace RecipeBook
         List<RecipeEntry> _Recipes = new List<RecipeEntry>();
         int SelectedRecipe = -1;
         #endregion
-
         #region Methods
         #region Dynamic Fields
         private void BuildIngredientComboBox()
@@ -137,6 +136,7 @@ namespace RecipeBook
                     id = -1;
                     MessageBox.Show(e.Message);
                 }
+                _Recipes.Where(r => r.recID == SelectedRecipe).First().UpdateRecipe(txt_RecipeName.Text, txt_RecipeSource.Text, txt_RecipeDescription.Text, txt_RecipePrepInstructions.Text, txt_RecipeCookInstructions.Text, _Ingredients);
             }
             RefreshRecipeList();
         }
@@ -161,12 +161,18 @@ namespace RecipeBook
         /// <returns>new bool</returns>
         public bool HasSaved()
         {
-            foreach (TextBox c in RecipeEntry.Children.OfType<TextBox>())
+            bool hasSaved = true;
+            foreach (TextBox c in grd_RecipeEntry.Children.OfType<TextBox>())
             {
                 if (c.Text.Length > 0)
-                    return false;
+                    hasSaved = false;
             }
-            return true;
+            RecipeEntry recTemp = new RecipeEntry(txt_RecipeName.Text, txt_RecipeSource.Text, txt_RecipeDescription.Text, txt_RecipePrepInstructions.Text, txt_RecipeCookInstructions.Text, _Ingredients, SelectedRecipe);
+            if (_Recipes.Contains(recTemp))
+            {
+                hasSaved = true;
+            }
+            return hasSaved;
         }
         /// <summary>
         /// Checks if the data for the ingredient to be added has been entered completely and correctly.
@@ -200,7 +206,8 @@ namespace RecipeBook
         }
         #endregion
         #endregion
-
+        #region Event Handlers
+        #region Menu Events
         private void NewRecipe_MenuItem_Click(object sender, RoutedEventArgs e)
         {
             if (!HasSaved())
@@ -283,7 +290,31 @@ namespace RecipeBook
             }
             window.Show();
         }
-
+        private void PrintRecipe_MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog save = new SaveFileDialog();
+            save.DefaultExt = ".pdf";
+            save.Filter = "PDF (.pdf)|*.pdf";
+            bool? result = save.ShowDialog();
+            if (result == true)
+            {
+                string filename = save.FileName;
+                PDFPrinter.SingleRecipePDF(_Recipes[lst_Recipes.SelectedIndex], filename, true);
+            }
+        }
+        private void PrintAllRecipes_MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog save = new SaveFileDialog();
+            save.DefaultExt = ".pdf";
+            save.Filter = "PDF (.pdf)|*.pdf";
+            bool? result = save.ShowDialog();
+            if (result == true)
+            {
+                string filename = save.FileName;
+                PDFPrinter.AllRecipesPDF(_Recipes, filename, true);
+            }
+        }
+        #endregion
         #region Ingredient Events
         private void btn_AddIngredient_Click(object sender, RoutedEventArgs e)
         {
@@ -322,7 +353,6 @@ namespace RecipeBook
             }
         }
         #endregion
-
         private void MainWindow_Activated(object sender, EventArgs e)
         {
             BuildIngredientComboBox();
@@ -330,7 +360,6 @@ namespace RecipeBook
             RefreshIngredientList();
             //RefreshRecipeList();
         }
-
         private void lst_Recipes_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (lst_Recipes.SelectedIndex > -1)
@@ -357,31 +386,6 @@ namespace RecipeBook
                 SelectedRecipe = -1;
             }
         }
-
-        private void PrintRecipe_MenuItem_Click(object sender, RoutedEventArgs e)
-        {
-            SaveFileDialog save = new SaveFileDialog();
-            save.DefaultExt = ".pdf";
-            save.Filter = "PDF (.pdf)|*.pdf";
-            bool? result = save.ShowDialog();
-            if(result == true)
-            {
-                string filename = save.FileName;
-                PDFPrinter.SingleRecipePDF(_Recipes[lst_Recipes.SelectedIndex], filename, true);
-            }
-        }
-
-        private void PrintAllRecipes_MenuItem_Click(object sender, RoutedEventArgs e)
-        {
-            SaveFileDialog save = new SaveFileDialog();
-            save.DefaultExt = ".pdf";
-            save.Filter = "PDF (.pdf)|*.pdf";
-            bool? result = save.ShowDialog();
-            if (result == true)
-            {
-                string filename = save.FileName;
-                PDFPrinter.AllRecipesPDF(_Recipes, filename, true);
-            }
-        }
+        #endregion
     }
 }

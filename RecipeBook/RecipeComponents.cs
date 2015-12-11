@@ -33,12 +33,9 @@ namespace RecipeBook.Components
             {
                 using (RecipeBook_DataModelDataContext db = new RecipeBook_DataModelDataContext())
                 {
-                    var original = from ing in db.Ingredients where ing.ing_ID == id select ing;
-                    foreach (Ingredient m in original)
-                    {
-                        m.ing_Name = name;
-                        m.ing_Description = description;
-                    }
+                    var original = (from ing in db.Ingredients where ing.ing_ID == id select ing).First();
+                    original.ing_Name = name;
+                    original.ing_Description = description;
                     db.SubmitChanges();
                 }
             }
@@ -152,15 +149,11 @@ namespace RecipeBook.Components
                         recing.ing_ID = i.Ingredient.ing_ID;
                         recing.mes_ID = i.Measurement.mes_ID;
                         recing.ri_Amount = i.Amount;
+                        recing.Ingredient = i.Ingredient;
+                        recing.Measurement = i.Measurement;
                         db.RecipeIngredients.InsertOnSubmit(recing);
                     }
                     db.SubmitChanges();
-
-                    var q = from ri in db.RecipeIngredients select ri;
-                    foreach(RecipeIngredient n in q)
-                    {
-                        Console.WriteLine(n.ToString());
-                    }
                 }
             }
             catch (Exception)
@@ -175,7 +168,32 @@ namespace RecipeBook.Components
             {
                 using (RecipeBook_DataModelDataContext db = new RecipeBook_DataModelDataContext())
                 {
-
+                    var original = (from rec in db.Recipes where rec.rec_ID == rec_ID select rec).First();
+                    original.rec_Name = name;
+                    original.rec_Source = source;
+                    original.rec_Description = description;
+                    original.rec_PreparationInstructions = prep;
+                    original.rec_CookingInstructions = cook;
+                    db.SubmitChanges();
+                }
+                using (RecipeBook_DataModelDataContext db = new RecipeBook_DataModelDataContext())
+                {
+                    var original = from rec in db.RecipeIngredients where rec.rec_ID == rec_ID select rec;
+                    List<RecipeIngredient> _recTempsAdd = new List<RecipeIngredient>();
+                    foreach (IngredientEntry i in ingredients)
+                    {
+                        RecipeIngredient recTemp = new RecipeIngredient();
+                        recTemp.Ingredient = i.Ingredient;
+                        recTemp.ing_ID = i.Ingredient.ing_ID;
+                        recTemp.Measurement = i.Measurement;
+                        recTemp.mes_ID = i.Measurement.mes_ID;
+                        recTemp.ri_Amount = i.Amount;
+                        recTemp.rec_ID = rec_ID;
+                        _recTempsAdd.Add(recTemp);
+                    }
+                    db.RecipeIngredients.DeleteAllOnSubmit(original);
+                    db.RecipeIngredients.InsertAllOnSubmit(_recTempsAdd);
+                    db.SubmitChanges();
                 }
             }
             catch (Exception)
@@ -243,6 +261,15 @@ namespace RecipeBook.Components
         public string Source { get { return _source; } }
         public string PrepInstructions { get { return _prepinstructions; } }
         public string CookInstructions { get { return _cookinstructions; } }
+        public void UpdateRecipe(string name, string description, string source, string prep, string cook, List<IngredientEntry> ingredients)
+        {
+            _ingredients = ingredients;
+            _name = name;
+            _description = description;
+            _source = source;
+            _prepinstructions = prep;
+            _cookinstructions = cook;
+        }
         public override string ToString()
         {
             return Name + "(" + ConcatenateIngredients() + ")";
