@@ -50,14 +50,28 @@ namespace RecipeBook
         }
         private void btn_Delete_Click(object sender, RoutedEventArgs e)
         {
-            Recipes.DeleteMeasurement(SelectedID);
-            RefreshList();
+            if (SelectedID > -1)
+            {
+                Recipes.DeleteMeasurement(SelectedID);
+                RefreshList();
+            }
+            else
+            {
+                MessageBox.Show("Please select a measurement to delete.");
+            }
         }
         private void btn_Save_Click(object sender, RoutedEventArgs e)
         {
-            Recipes.UpdateMeasurement(SelectedID, txt_Name.Text, txt_Description.Text, (MeasurementTypes)cmb_Type.SelectedItem);
-            RefreshList();
-            ClearFields();
+            if (SelectedID > -1)
+            {
+                Recipes.UpdateMeasurement(SelectedID, txt_Name.Text, txt_Description.Text, (MeasurementTypes)cmb_Type.SelectedItem);
+                RefreshList();
+                ClearFields(); 
+            }
+            else
+            {
+                MessageBox.Show("Please select a measurement to save.");
+            }
         }
         private void lst_Measurements_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {

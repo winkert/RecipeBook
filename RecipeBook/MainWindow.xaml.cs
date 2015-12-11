@@ -332,9 +332,12 @@ namespace RecipeBook
         }
         private void btn_DelIngredient_Click(object sender, RoutedEventArgs e)
         {
-            _Ingredients.RemoveAt(lst_Ingredients.SelectedIndex);
-            RefreshIngredientList();
-            NewIngredient();
+            if (lst_Ingredients.SelectedIndex > -1)
+            {
+                _Ingredients.RemoveAt(lst_Ingredients.SelectedIndex);
+                RefreshIngredientList();
+                NewIngredient(); 
+            }
         }
         private void lst_Ingredients_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {

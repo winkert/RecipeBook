@@ -125,6 +125,7 @@ namespace RecipeBook.Components
         #region Recipes
         public static void InsertRecipe(string name, string source, string description, string prep, string cook, List<IngredientEntry> ingredients, out int recid)
         {
+            int id;
             try
             {
                 using (RecipeBook_DataModelDataContext db = new RecipeBook_DataModelDataContext())
@@ -138,23 +139,23 @@ namespace RecipeBook.Components
                     rec.rec_EntryDate = DateTime.Today;
                     db.Recipes.InsertOnSubmit(rec);
                     db.SubmitChanges();
-                    recid = rec.rec_ID;
+                    id = rec.rec_ID;
                 }
                 using (RecipeBook_DataModelDataContext db = new RecipeBook_DataModelDataContext())
                 {
+                    var recipe = (from rec in db.Recipes where rec.rec_ID == id select rec).First();
                     foreach (IngredientEntry i in ingredients)
                     {
                         RecipeIngredient recing = new RecipeIngredient();
-                        recing.rec_ID = recid;
+                        recing.rec_ID = id;
                         recing.ing_ID = i.Ingredient.ing_ID;
                         recing.mes_ID = i.Measurement.mes_ID;
                         recing.ri_Amount = i.Amount;
-                        recing.Ingredient = i.Ingredient;
-                        recing.Measurement = i.Measurement;
-                        db.RecipeIngredients.InsertOnSubmit(recing);
+                        recipe.RecipeIngredients.Add(recing);
                     }
                     db.SubmitChanges();
                 }
+                recid = id;
             }
             catch (Exception)
             {
@@ -178,21 +179,17 @@ namespace RecipeBook.Components
                 }
                 using (RecipeBook_DataModelDataContext db = new RecipeBook_DataModelDataContext())
                 {
-                    var original = from rec in db.RecipeIngredients where rec.rec_ID == rec_ID select rec;
-                    List<RecipeIngredient> _recTempsAdd = new List<RecipeIngredient>();
+                    var original = (from rec in db.Recipes where rec.rec_ID == rec_ID select rec.RecipeIngredients).First();
+                    original.Clear();
                     foreach (IngredientEntry i in ingredients)
                     {
                         RecipeIngredient recTemp = new RecipeIngredient();
-                        recTemp.Ingredient = i.Ingredient;
                         recTemp.ing_ID = i.Ingredient.ing_ID;
-                        recTemp.Measurement = i.Measurement;
                         recTemp.mes_ID = i.Measurement.mes_ID;
                         recTemp.ri_Amount = i.Amount;
                         recTemp.rec_ID = rec_ID;
-                        _recTempsAdd.Add(recTemp);
+                        original.Add(recTemp);
                     }
-                    db.RecipeIngredients.DeleteAllOnSubmit(original);
-                    db.RecipeIngredients.InsertAllOnSubmit(_recTempsAdd);
                     db.SubmitChanges();
                 }
             }
@@ -234,7 +231,9 @@ namespace RecipeBook.Components
             return t;
         }
     }
-    
+    /// <summary>
+    /// Object class to hold information about recipes from the database and display the information in a readable way.
+    /// </summary>
     public class RecipeEntry
     {
         public RecipeEntry() { }
@@ -287,10 +286,15 @@ namespace RecipeBook.Components
                 else
                     ingredients += ", ";
             }
+            char last = ingredients.LastOrDefault();
+            if (last == ' ')
+                ingredients = ingredients.Substring(0, ingredients.Length - 2);
             return ingredients;
         }
     }
-
+    /// <summary>
+    /// Object class to hold information about ingredients from the database and display the information in a readable way.
+    /// </summary>
     public class IngredientEntry
     {
         public IngredientEntry() { }
