@@ -99,6 +99,7 @@
       <DependentUpon>EditMeasurements.xaml</DependentUpon>
     </Compile>
     <Compile Include="PDFPrinter.cs" />
+    <Compile Include="RecipeBookDataModelExtension.cs" />
     <Compile Include="RecipeUtilities.cs" />
     <Compile Include="RecipeBook_DataModel.designer.cs">
       <AutoGen>True</AutoGen>

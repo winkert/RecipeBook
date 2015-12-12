@@ -210,6 +210,7 @@ namespace RecipeBook
         #region Menu Events
         private void PrintRecipe_MenuItem_Click(object sender, RoutedEventArgs e)
         {
+            //This method will be changed to have a separate window which allows for additional information for the PDF itself
             SaveFileDialog save = new SaveFileDialog();
             save.DefaultExt = ".pdf";
             save.Filter = "PDF (.pdf)|*.pdf";
@@ -222,6 +223,7 @@ namespace RecipeBook
         }
         private void PrintAllRecipes_MenuItem_Click(object sender, RoutedEventArgs e)
         {
+            //Potentially this could also open a new window to allow for some customization.
             SaveFileDialog save = new SaveFileDialog();
             save.DefaultExt = ".pdf";
             save.Filter = "PDF (.pdf)|*.pdf";

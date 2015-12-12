@@ -1,17 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="RecipeBook" Class="RecipeBook_DataModelDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
   <Connection Mode="AppSettings" ConnectionString="Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\RecipeBook.mdf;Integrated Security=True" SettingsObjectName="RecipeBook.Properties.Settings" SettingsPropertyName="RecipeBookConnectionString" Provider="System.Data.SqlClient" />
-  <Table Name="dbo.Recipes" Member="Recipes">
-    <Type Name="Recipe">
-      <Column Name="rec_ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="rec_Name" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
-      <Column Name="rec_Description" Type="System.String" DbType="VarChar(200)" CanBeNull="true" />
-      <Column Name="rec_Source" Type="System.String" DbType="VarChar(60)" CanBeNull="true" />
-      <Column Name="rec_PreparationInstructions" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
-      <Column Name="rec_CookingInstructions" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
-      <Column Name="rec_EntryDate" Type="System.DateTime" DbType="Date" CanBeNull="true" />
-      <Association Name="Recipe_RecipeIngredient" Member="RecipeIngredients" ThisKey="rec_ID" OtherKey="rec_ID" Type="RecipeIngredient" />
-    </Type>
-  </Table>
   <Table Name="dbo.Ingredients" Member="Ingredients">
     <Type Name="Ingredient">
       <Column Name="ing_ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -41,13 +29,26 @@
       <Association Name="Recipe_RecipeIngredient" Member="Recipe" ThisKey="rec_ID" OtherKey="rec_ID" Type="Recipe" IsForeignKey="true" />
     </Type>
   </Table>
-  <Table Name="dbo.Full_Recipes" Member="Full_Recipes">
-    <Type Name="Full_Recipe">
+  <Table Name="dbo.RecipeCategories" Member="RecipeCategories">
+    <Type Name="RecipeCategory">
+      <Column Name="cat_ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="cat_Name" Type="System.String" DbType="VarChar(30)" CanBeNull="true" />
+      <Column Name="cat_Description" Type="System.String" DbType="VarChar(200)" CanBeNull="true" />
+      <Association Name="RecipeCategory_Recipe" Member="Recipes" ThisKey="cat_ID" OtherKey="cat_ID" Type="Recipe" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Recipes" Member="Recipes">
+    <Type Name="Recipe">
+      <Column Name="rec_ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="rec_Name" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
       <Column Name="rec_Description" Type="System.String" DbType="VarChar(200)" CanBeNull="true" />
-      <Column Name="ri_Amount" Type="System.Double" DbType="Float" CanBeNull="true" />
-      <Column Name="mes_Name" Type="System.String" DbType="VarChar(30)" CanBeNull="true" />
-      <Column Name="ing_Name" Type="System.String" DbType="VarChar(30)" CanBeNull="true" />
+      <Column Name="rec_Source" Type="System.String" DbType="VarChar(60)" CanBeNull="true" />
+      <Column Name="rec_PreparationInstructions" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="rec_CookingInstructions" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="rec_EntryDate" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+      <Column Name="cat_ID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="Recipe_RecipeIngredient" Member="RecipeIngredients" ThisKey="rec_ID" OtherKey="rec_ID" Type="RecipeIngredient" />
+      <Association Name="RecipeCategory_Recipe" Member="RecipeCategory" ThisKey="cat_ID" OtherKey="cat_ID" Type="RecipeCategory" IsForeignKey="true" />
     </Type>
   </Table>
 </Database>

@@ -9,6 +9,11 @@ create table Ingredients(
 	, ing_Name varchar(30)
 	, ing_Description varchar(200)
 	)
+create table RecipeCategories(
+	cat_ID int identity primary key
+	, cat_Name varchar(30)
+	, cat_Description varchar(200)
+	)
 create table Recipes (
 	rec_ID int identity primary key
 	, rec_Name varchar(100)
@@ -17,6 +22,7 @@ create table Recipes (
 	, rec_PreparationInstructions varchar(500)
 	, rec_CookingInstructions varchar(500)
 	, rec_EntryDate date
+	, cat_ID int foreign key references RecipeCategories(cat_ID)
 	)
 create table RecipeIngredients(
 	ri_ID int identity primary key
@@ -26,6 +32,7 @@ create table RecipeIngredients(
 	, ri_Amount float
 	)
 go
+
 --Recipe View
 create view Full_Recipes as (
 	select r.rec_Name, r.rec_Description, r.rec_Source, r.rec_EntryDate
