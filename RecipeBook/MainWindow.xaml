@@ -18,9 +18,8 @@
         </Grid.RowDefinitions>
         <Menu x:Name="menu" Height="25" Grid.Row="0" Grid.RowSpan="1" VerticalAlignment="Top" Grid.ColumnSpan="2">
             <MenuItem Header="File">
-                <MenuItem Header="New Recipe" Click="NewRecipe_MenuItem_Click"/>
-                <MenuItem Header="Save Recipe" Click="SaveRecipe_MenuItem_Click"/>
-                <MenuItem Header="Delete Recipe" Click="DeleteRecipe_MenuItem_Click"/>
+                <MenuItem Header="Print Recipe" Click="PrintRecipe_MenuItem_Click"/>
+                <MenuItem Header="Print All Recipes" Click="PrintAllRecipes_MenuItem_Click"/>
                 <MenuItem Header="Exit" Click="Exit_MenuItem_Click"/>
             </MenuItem>
             <MenuItem Header="Tools">
@@ -28,12 +27,8 @@
                 <MenuItem Header="Edit Ingredients" Click="EditIngredients_MenuItem_Click"/>
                 <MenuItem Header="View Recipes" Click="ViewRecipes_MenuItem_Click"/>
             </MenuItem>
-            <MenuItem Header="Export">
-                <MenuItem Header="Print Recipe" Click="PrintRecipe_MenuItem_Click"/>
-                <MenuItem Header="Print All Recipes" Click="PrintAllRecipes_MenuItem_Click"/>
-            </MenuItem>
         </Menu>
-        <ListBox x:Name="lst_Recipes" Height="96" Margin="10,11,10,0" Grid.Row="1" VerticalAlignment="Top" TabIndex="0" SelectionChanged="lst_Recipes_SelectionChanged" Grid.ColumnSpan="2"/>
+        <ListBox x:Name="lst_Recipes" Height="96" Margin="10,11,10,0" Grid.Row="1" VerticalAlignment="Top" TabIndex="0" SelectionChanged="lst_Recipes_SelectionChanged"/>
         <Border Margin="10,112,10,0" Grid.Row="1" Height="345" VerticalAlignment="Top">
             <Grid x:Name="grd_RecipeEntry" HorizontalAlignment="Left" Width="343" Margin="0,0,-1,9">
                 <Label x:Name="l_RecipeName" Content="Recipe Name" HorizontalAlignment="Left" Grid.Column="0" VerticalAlignment="Top"/>
@@ -62,6 +57,8 @@
 
             </Grid>
         </Border>
-
+        <Button x:Name="btn_NewRecipe" Content="New Recipe" Click="NewRecipe_MenuItem_Click" Grid.Column="1" HorizontalAlignment="Left" Margin="10,11,0,0" Grid.Row="1" VerticalAlignment="Top" Width="75"/>
+        <Button x:Name="btn_SaveRecipe" Content="Save Recipe" Click="SaveRecipe_MenuItem_Click" Grid.Column="1" HorizontalAlignment="Left" Margin="10,36,0,0" Grid.Row="1" VerticalAlignment="Top" Width="75"/>
+        <Button x:Name="btn_DeleteRecipe" Content="Delete Recipe" Click="DeleteRecipe_MenuItem_Click" Grid.Column="1" HorizontalAlignment="Left" Margin="10,61,0,0" Grid.Row="1" VerticalAlignment="Top" Width="75"/>
     </Grid>
 </Window>

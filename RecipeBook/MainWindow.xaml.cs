@@ -208,33 +208,29 @@ namespace RecipeBook
         #endregion
         #region Event Handlers
         #region Menu Events
-        private void NewRecipe_MenuItem_Click(object sender, RoutedEventArgs e)
+        private void PrintRecipe_MenuItem_Click(object sender, RoutedEventArgs e)
         {
-            if (!HasSaved())
+            SaveFileDialog save = new SaveFileDialog();
+            save.DefaultExt = ".pdf";
+            save.Filter = "PDF (.pdf)|*.pdf";
+            bool? result = save.ShowDialog();
+            if (result == true)
             {
-                MessageBoxResult result = MessageBox.Show("You have not saved your current recipe, are you sure you want to start a new one?", "Do you want to save first?", MessageBoxButton.OKCancel);
-                if (result == MessageBoxResult.OK)
-                {
-                    NewRecipe();
-                } 
+                string filename = save.FileName;
+                PDFPrinter.SingleRecipePDF(_Recipes[lst_Recipes.SelectedIndex], filename, true);
             }
         }
-        private void SaveRecipe_MenuItem_Click(object sender, RoutedEventArgs e)
+        private void PrintAllRecipes_MenuItem_Click(object sender, RoutedEventArgs e)
         {
-            if (!HasSaved())
+            SaveFileDialog save = new SaveFileDialog();
+            save.DefaultExt = ".pdf";
+            save.Filter = "PDF (.pdf)|*.pdf";
+            bool? result = save.ShowDialog();
+            if (result == true)
             {
-                SaveRecipe();
+                string filename = save.FileName;
+                PDFPrinter.AllRecipesPDF(_Recipes, filename, true);
             }
-            else
-            {
-                MessageBox.Show("There is no recipe to save.");
-            }
-        }
-        private void DeleteRecipe_MenuItem_Click(object sender, RoutedEventArgs e)
-        {
-            Recipes.DeleteRecipe(SelectedRecipe);
-            _Recipes.RemoveAt(lst_Recipes.SelectedIndex);
-            RefreshRecipeList();
         }
         private void Exit_MenuItem_Click(object sender, RoutedEventArgs e)
         {
@@ -290,29 +286,35 @@ namespace RecipeBook
             }
             window.Show();
         }
-        private void PrintRecipe_MenuItem_Click(object sender, RoutedEventArgs e)
+        #endregion
+        #region Recipe Events
+        private void NewRecipe_MenuItem_Click(object sender, RoutedEventArgs e)
         {
-            SaveFileDialog save = new SaveFileDialog();
-            save.DefaultExt = ".pdf";
-            save.Filter = "PDF (.pdf)|*.pdf";
-            bool? result = save.ShowDialog();
-            if (result == true)
+            if (!HasSaved())
             {
-                string filename = save.FileName;
-                PDFPrinter.SingleRecipePDF(_Recipes[lst_Recipes.SelectedIndex], filename, true);
+                MessageBoxResult result = MessageBox.Show("You have not saved your current recipe, are you sure you want to start a new one?", "Do you want to save first?", MessageBoxButton.OKCancel);
+                if (result == MessageBoxResult.OK)
+                {
+                    NewRecipe();
+                }
             }
         }
-        private void PrintAllRecipes_MenuItem_Click(object sender, RoutedEventArgs e)
+        private void SaveRecipe_MenuItem_Click(object sender, RoutedEventArgs e)
         {
-            SaveFileDialog save = new SaveFileDialog();
-            save.DefaultExt = ".pdf";
-            save.Filter = "PDF (.pdf)|*.pdf";
-            bool? result = save.ShowDialog();
-            if (result == true)
+            if (!HasSaved())
             {
-                string filename = save.FileName;
-                PDFPrinter.AllRecipesPDF(_Recipes, filename, true);
+                SaveRecipe();
             }
+            else
+            {
+                MessageBox.Show("There is no recipe to save.");
+            }
+        }
+        private void DeleteRecipe_MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            Recipes.DeleteRecipe(SelectedRecipe);
+            _Recipes.RemoveAt(lst_Recipes.SelectedIndex);
+            RefreshRecipeList();
         }
         #endregion
         #region Ingredient Events
