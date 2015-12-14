@@ -1,11 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows;
 
 namespace RecipeBook.Utilities
 {
     public static class Common
     {
+        /// <summary>
+        /// Using common English language rules, this method makes a noun plural
+        /// </summary>
+        /// <param name="s">singular noun</param>
+        /// <returns>plural noun</returns>
         public static string Pluralize(string s)
         {
             if (s.Length < 1)
@@ -25,6 +31,34 @@ namespace RecipeBook.Utilities
             {
                 return s + "s";
             }
+        }
+        /// <summary>
+        /// Creates or calls a window of type T
+        /// </summary>
+        /// <typeparam name="T">Derived Window</typeparam>
+        /// <param name="col">Window collection</param>
+        /// <returns></returns>
+        public static Window NewWindow<T>() where T : Window
+        {
+            T window;
+            try
+            {
+                if (Application.Current.Windows.OfType<T>().Count() == 0)
+                {
+                    window = (T)Activator.CreateInstance(typeof(T));
+                    Console.WriteLine(window.ToString());
+                }
+                else
+                {
+                    window = Application.Current.Windows.OfType<T>().First();
+                    Console.WriteLine(window.ToString());
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return window;
         }
     }
 }

@@ -251,42 +251,19 @@ namespace RecipeBook
         }
         private void EditMeasurements_MenuItem_Click(object sender, RoutedEventArgs e)
         {
-            EditMeasurements window;
-            if (OwnedWindows.OfType<EditMeasurements>().Count() == 0)
-            {
-                window = new EditMeasurements(); 
-            }
-            else
-            {
-                window = OwnedWindows.OfType<EditMeasurements>().First();
-            }
-            window.Show();
+            Common.NewWindow<EditMeasurements>().Show();
         }
         private void EditIngredients_MenuItem_Click(object sender, RoutedEventArgs e)
         {
-            EditIngredients window;
-            if (OwnedWindows.OfType<EditIngredients>().Count() == 0)
-            {
-                window = new EditIngredients();
-            }
-            else
-            {
-                window = OwnedWindows.OfType<EditIngredients>().First();
-            }
-            window.Show();
+            Common.NewWindow<EditIngredients>().Show();
+        }
+        private void EditCategories_MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            //Common.NewWindow<EditCategories>().Show();
         }
         private void ViewRecipes_MenuItem_Click(object sender, RoutedEventArgs e)
         {
-            ViewRecipes window;
-            if (OwnedWindows.OfType<ViewRecipes>().Count() == 0)
-            {
-                window = new ViewRecipes();
-            }
-            else
-            {
-                window = OwnedWindows.OfType<ViewRecipes>().First();
-            }
-            window.Show();
+            //Common.NewWindow<ViewRecipes>().Show();
         }
         #endregion
         #region Recipe Events
@@ -394,5 +371,6 @@ namespace RecipeBook
             }
         }
         #endregion
+
     }
 }
