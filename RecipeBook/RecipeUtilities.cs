@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 
@@ -40,25 +39,23 @@ namespace RecipeBook.Utilities
         /// <returns></returns>
         public static Window NewWindow<T>() where T : Window
         {
-            T window;
             try
             {
                 if (Application.Current.Windows.OfType<T>().Count() == 0)
                 {
-                    window = (T)Activator.CreateInstance(typeof(T));
-                    Console.WriteLine(window.ToString());
+                    return (T)Activator.CreateInstance(typeof(T));
                 }
                 else
                 {
-                    window = Application.Current.Windows.OfType<T>().First();
-                    Console.WriteLine(window.ToString());
+                    //this does not seem to work right now. It grabs the right window but it does not show it
+                    return Application.Current.Windows.OfType<T>().First();
                 }
             }
             catch (Exception)
             {
+                return new Window();
                 throw;
             }
-            return window;
         }
     }
 }

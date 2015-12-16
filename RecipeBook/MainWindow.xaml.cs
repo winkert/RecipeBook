@@ -17,6 +17,7 @@ namespace RecipeBook
         public MainWindow()
         {
             InitializeComponent();
+            BuildCategoryComboBox();
             BuildIngredientComboBox();
             BuildMeasurementComboBox();
             BuildRecipeListBox();
@@ -28,6 +29,20 @@ namespace RecipeBook
         #endregion
         #region Methods
         #region Dynamic Fields
+        private void BuildCategoryComboBox()
+        {
+            try
+            {
+                using (RecipeBook_DataModelDataContext db = new RecipeBook_DataModelDataContext())
+                {
+                    cmb_RecipeCategory.ItemsSource = db.RecipeCategories;
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Building Category Combobox failed: " + e.Message);
+            }
+        }
         private void BuildIngredientComboBox()
         {
             try
@@ -74,7 +89,7 @@ namespace RecipeBook
                             IngredientEntry ingred = new IngredientEntry(ing, m.First(), (double)a.First());
                             ingredients.Add(ingred);
                         }
-                        RecipeEntry rec = new RecipeEntry(re.rec_Name,re.rec_Description,re.rec_Source,re.rec_PreparationInstructions,re.rec_CookingInstructions, ingredients, re.rec_ID);
+                        RecipeEntry rec = new RecipeEntry(re.rec_Name, re.rec_Source,(RecipeCategory)cmb_RecipeCategory.SelectedItem,re.rec_Description,re.rec_PreparationInstructions,re.rec_CookingInstructions, ingredients, re.rec_ID);
                         _Recipes.Add(rec);
                     }
                 }
@@ -102,6 +117,7 @@ namespace RecipeBook
             {
                 c.Text = string.Empty;
             }
+            cmb_RecipeCategory.SelectedIndex = -1;
             lst_Recipes.SelectedIndex = -1;
             _Ingredients.Clear();
             RefreshIngredientList();
@@ -114,14 +130,14 @@ namespace RecipeBook
             {
                 try
                 {
-                    Recipes.InsertRecipe(txt_RecipeName.Text, txt_RecipeSource.Text, txt_RecipeDescription.Text, txt_RecipePrepInstructions.Text, txt_RecipeCookInstructions.Text, _Ingredients, out id);
+                    Recipes.InsertRecipe(txt_RecipeName.Text, txt_RecipeSource.Text, (RecipeCategory)cmb_RecipeCategory.SelectedItem, txt_RecipeDescription.Text, txt_RecipePrepInstructions.Text, txt_RecipeCookInstructions.Text, _Ingredients, out id);
                 }
                 catch (Exception e)
                 {
                     id = -1;
                     MessageBox.Show(e.Message);
                 }
-                RecipeEntry _rec = new RecipeEntry(txt_RecipeName.Text, txt_RecipeSource.Text, txt_RecipeDescription.Text, txt_RecipePrepInstructions.Text, txt_RecipeCookInstructions.Text, _Ingredients, id);
+                RecipeEntry _rec = new RecipeEntry(txt_RecipeName.Text, txt_RecipeSource.Text, (RecipeCategory)cmb_RecipeCategory.SelectedItem, txt_RecipeDescription.Text, txt_RecipePrepInstructions.Text, txt_RecipeCookInstructions.Text, _Ingredients, id);
                 _Recipes.Add(_rec); 
             }
             else
@@ -129,7 +145,7 @@ namespace RecipeBook
                 id = SelectedRecipe;
                 try
                 {
-                    Recipes.UpdateRecipe(txt_RecipeName.Text, txt_RecipeSource.Text, txt_RecipeDescription.Text, txt_RecipePrepInstructions.Text, txt_RecipeCookInstructions.Text, _Ingredients, id);
+                    Recipes.UpdateRecipe(txt_RecipeName.Text, txt_RecipeSource.Text, (RecipeCategory)cmb_RecipeCategory.SelectedItem, txt_RecipeDescription.Text, txt_RecipePrepInstructions.Text, txt_RecipeCookInstructions.Text, _Ingredients, id);
                 }
                 catch(Exception e)
                 {
@@ -167,7 +183,7 @@ namespace RecipeBook
                 if (c.Text.Length > 0)
                     hasSaved = false;
             }
-            RecipeEntry recTemp = new RecipeEntry(txt_RecipeName.Text, txt_RecipeSource.Text, txt_RecipeDescription.Text, txt_RecipePrepInstructions.Text, txt_RecipeCookInstructions.Text, _Ingredients, SelectedRecipe);
+            RecipeEntry recTemp = new RecipeEntry(txt_RecipeName.Text, txt_RecipeSource.Text, (RecipeCategory)cmb_RecipeCategory.SelectedItem, txt_RecipeDescription.Text, txt_RecipePrepInstructions.Text, txt_RecipeCookInstructions.Text, _Ingredients, SelectedRecipe);
             if (_Recipes.Contains(recTemp))
             {
                 hasSaved = true;

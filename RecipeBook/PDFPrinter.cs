@@ -34,6 +34,9 @@ namespace RecipeBook.Utilities
         {
             Document file = new Document();
             file.Info.Title = "Recipe Book";
+            //Categories come in to play here.
+            //I can create lists of recipes by category using LINQ
+            //Then for each category create a new header section.
             foreach (RecipeEntry recipe in recipes)
             {
                 Section section = file.AddSection();
@@ -56,7 +59,8 @@ namespace RecipeBook.Utilities
         private static void DrawRecipe(RecipeEntry recipe, ref Section section)
         {
             ///<example>
-            ///     [Recipe Name]                   [Recipe Source]
+            ///     [Recipe Name]
+            ///     [Recipe Source]
             ///  [Recipe Description]
             ///  [# Recipe Ingredients]
             ///  [Recipe Preparation Instructions]
