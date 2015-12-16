@@ -37,7 +37,7 @@
                 <Label x:Name="l_RecipeSource" Content="Recipe Source" HorizontalAlignment="Left" Margin="0,26,0,0" Grid.Column="0" VerticalAlignment="Top"/>
                 <TextBox x:Name="txt_RecipeSource" HorizontalAlignment="Left" Height="23" Margin="90,28,0,0" Grid.Column="0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="238" TabIndex="5" MaxLength="60" AutoWordSelection="True"/>
                 <Label x:Name="l_RecipeCategory" Content="Recipe Category" HorizontalAlignment="Left" Margin="0,57,0,0" Grid.Column="0" VerticalAlignment="Top"/>
-                <ComboBox x:Name="cmb_RecipeCategory" Margin="101,59,0,0" Height="24" VerticalAlignment="Top" HorizontalAlignment="Left" Width="227"/>
+                <ComboBox x:Name="cmb_RecipeCategory" Margin="101,59,0,0" Height="24" VerticalAlignment="Top" HorizontalAlignment="Left" Width="227" FontSize="13.333" FontFamily="Times New Roman"/>
                 <Label x:Name="l_RecipeDescription" Content="Recipe Description" HorizontalAlignment="Left" Margin="0,81,0,0" Grid.Column="0" Height="27" VerticalAlignment="Top"/>
                 <TextBox x:Name="txt_RecipeDescription" HorizontalAlignment="Left" Margin="0,108,0,0" Grid.Column="0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="56" Width="328" TabIndex="6" MaxLength="200" AcceptsReturn="True" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True"/>
                 <Label x:Name="l_RecipePrepInstructions" Content="Preparation Instructions" HorizontalAlignment="Left" Margin="0,164,0,0" Grid.Column="0" Height="26" VerticalAlignment="Top"/>
@@ -51,9 +51,9 @@
             <Grid Margin="0,0,0,1">
                 <ListBox x:Name="lst_Ingredients" Height="270" VerticalAlignment="Top" TabIndex="9" SelectionChanged="lst_Ingredients_SelectionChanged" HorizontalAlignment="Left" Width="225"/>
                 <Label x:Name="l_IngredientName" Content="Ingredient" HorizontalAlignment="Left" Margin="0,275,0,0" VerticalAlignment="Top" Height="26" Width="65"/>
-                <ComboBox x:Name="cmb_IngredientNames" HorizontalAlignment="Left" Margin="70,275,0,0" VerticalAlignment="Top" Width="154" TabIndex="10" Height="22"/>
+                <ComboBox x:Name="cmb_IngredientNames" HorizontalAlignment="Left" Margin="70,275,0,0" VerticalAlignment="Top" Width="154" TabIndex="10" Height="22" FontSize="13.333" FontFamily="Times New Roman"/>
                 <Label x:Name="l_Measurement" Content="Measurement" HorizontalAlignment="Left" Margin="0,306,0,0" VerticalAlignment="Top" Height="26" Width="83"/>
-                <ComboBox x:Name="cmb_Measurement" HorizontalAlignment="Left" Margin="88,306,0,0" VerticalAlignment="Top" Width="136" TabIndex="11" Height="22"/>
+                <ComboBox x:Name="cmb_Measurement" HorizontalAlignment="Left" Margin="88,306,0,0" VerticalAlignment="Top" Width="136" TabIndex="11" Height="22" FontSize="13.333" FontFamily="Times New Roman"/>
                 <Label x:Name="l_Amount" Content="Amount" HorizontalAlignment="Left" Margin="9,337,0,0" VerticalAlignment="Top" Height="26" Width="53"/>
                 <TextBox x:Name="txt_Amount" HorizontalAlignment="Left" Height="23" Margin="70,337,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="38" TabIndex="12" MaxLength="4" AutoWordSelection="True"/>
                 <Button x:Name="btn_AddIngredient" Content="Add" HorizontalAlignment="Left" Margin="113,337,0,0" VerticalAlignment="Top" Width="43" TabIndex="13" Click="btn_AddIngredient_Click" Height="20"/>
