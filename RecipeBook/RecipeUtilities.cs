@@ -37,7 +37,7 @@ namespace RecipeBook.Utilities
         /// <typeparam name="T">Derived Window</typeparam>
         /// <param name="col">Window collection</param>
         /// <returns></returns>
-        public static Window NewWindow<T>() where T : Window
+        public static T NewWindow<T>() where T : Window
         {
             try
             {
@@ -53,7 +53,7 @@ namespace RecipeBook.Utilities
             }
             catch (Exception)
             {
-                return new Window();
+                return new Window() as T;
                 throw;
             }
         }

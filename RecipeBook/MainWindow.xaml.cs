@@ -257,12 +257,18 @@ namespace RecipeBook
                 MessageBoxResult result = MessageBox.Show("You have not saved your current recipe, are you sure you want to quit?", "Do you want to save first?", MessageBoxButton.OKCancel);
                 if (result == MessageBoxResult.OK)
                 {
-                    Close();
+                    foreach (Window w in Application.Current.Windows)
+                    {
+                        w.Close();
+                    }
                 } 
             }
             else
             {
-                Close();
+                foreach(Window w in Application.Current.Windows)
+                {
+                    w.Close();
+                }
             }
         }
         private void EditMeasurements_MenuItem_Click(object sender, RoutedEventArgs e)
@@ -279,7 +285,7 @@ namespace RecipeBook
         }
         private void ViewRecipes_MenuItem_Click(object sender, RoutedEventArgs e)
         {
-            //Common.NewWindow<ViewRecipes>().Show();
+            Common.NewWindow<ViewRecipes>().Show();
         }
         #endregion
         #region Recipe Events
